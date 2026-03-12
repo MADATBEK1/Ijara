@@ -1,0 +1,736 @@
+﻿<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Barcha E'lonlar — Uy, Mashina, Texnika Ijarasi | IjaraGo</title>
+    <meta name="description"
+        content="O'zbekistondagi eng ko'p ijara e'lonlari. Uy, mashina, texnika, mebel va boshqa toifalar bo'yicha filterlab qidiring. 2400+ faol e'lon!" />
+    <meta name="keywords" content="ijara e'lonlari, uy ijarasi, mashina ijarasi, Toshkent ijara, O'zbekiston ijara" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://ijarego.uz/listings.html" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <meta property="og:title" content="Barcha E'lonlar | IjaraGo" />
+    <meta property="og:description" content="2400+ ijara e'lonlari — uy, mashina, texnika va boshqa kategoriyalar." />
+    <meta property="og:url" content="https://ijarego.uz/listings.html" />
+    <meta property="og:image" content="https://ijarego.uz/og-image.png" />
+    <meta property="og:type" content="website" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="enhancements.css" />
+    <style>
+        .filter-sidebar input[type="range"] {
+            accent-color: var(--primary);
+            width: 100%;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--gray);
+        }
+
+        .no-results .no-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+
+        .no-results h3 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .apply-filter-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-family: var(--font);
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 8px;
+        }
+
+        .apply-filter-btn:hover {
+            opacity: .9;
+        }
+
+        .clear-filters-btn {
+            width: 100%;
+            padding: 10px;
+            background: transparent;
+            color: var(--gray);
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            font-family: var(--font);
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 8px;
+        }
+
+        .clear-filters-btn:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        /* ===== MAP SECTION ===== */
+        .map-section {
+            background: var(--white);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .map-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .map-section-header h3 {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .map-toggle-btn {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .map-toggle-btn:hover {
+            opacity: .7;
+        }
+
+        .map-container-wrap {
+            position: relative;
+            height: 340px;
+            display: none;
+        }
+
+        .map-container-wrap.open {
+            display: block;
+        }
+
+        .map-bg {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #e0f2fe, #ddd6fe);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-osm {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* City filter pills */
+        .city-filter-pills {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding: 12px 20px;
+            border-top: 1px solid var(--border);
+            background: var(--bg);
+        }
+
+        .city-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 16px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 700;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            transition: .2s;
+            background: var(--white);
+            color: var(--dark);
+        }
+
+        .city-pill.active,
+        .city-pill:hover {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+
+        /* ===== AI SEARCH ===== */
+        .ai-search-wrap {
+            background: linear-gradient(135deg, #0f172a, #1e1b4b);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(99, 102, 241, .3);
+        }
+
+        .ai-search-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, .5);
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .ai-search-input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .ai-search-input {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1.5px solid rgba(255, 255, 255, .15);
+            background: rgba(255, 255, 255, .08);
+            color: white;
+            font-family: var(--font);
+            font-size: 14px;
+            outline: none;
+            transition: .2s;
+        }
+
+        .ai-search-input::placeholder {
+            color: rgba(255, 255, 255, .35);
+        }
+
+        .ai-search-input:focus {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, .12);
+        }
+
+        .ai-search-btn {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-family: var(--font);
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: .2s;
+            white-space: nowrap;
+        }
+
+        .ai-search-btn:hover {
+            opacity: .88;
+            transform: translateY(-1px);
+        }
+
+        .ai-examples {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .ai-example-tag {
+            font-size: 11px;
+            color: rgba(255, 255, 255, .35);
+            background: rgba(255, 255, 255, .07);
+            border-radius: 100px;
+            padding: 4px 10px;
+            cursor: pointer;
+            transition: .2s;
+            border: 1px solid rgba(255, 255, 255, .12);
+        }
+
+        .ai-example-tag:hover {
+            background: rgba(255, 255, 255, .14);
+            color: rgba(255, 255, 255, .7);
+        }
+
+        .ai-thinking {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, .6);
+        }
+
+        .ai-thinking.show {
+            display: flex;
+        }
+
+        .ai-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: ai-pulse 1.2s ease-in-out infinite;
+        }
+
+        .ai-dot:nth-child(2) {
+            animation-delay: .2s;
+        }
+
+        .ai-dot:nth-child(3) {
+            animation-delay: .4s;
+        }
+
+        @keyframes ai-pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: .5;
+            }
+
+            50% {
+                transform: scale(1.5);
+                opacity: 1;
+            }
+        }
+
+        /* ===== RECOMMENDATIONS ===== */
+        .recommend-section {
+            margin-top: 48px;
+            padding-top: 32px;
+            border-top: 2px solid var(--border);
+        }
+
+        .recommend-section h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🏠</span>
+                <span class="logo-text">IjaraGo</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Bosh sahifa</a></li>
+                <li><a href="listings.html" class="active">E'lonlar</a></li>
+                <li><a href="categories.html">Kategoriyalar</a></li>
+                <li><a href="how-it-works.html">Qanday ishlaydi</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="dark-toggle" id="darkToggle" onclick="toggleDark()" title="Dark mode">🌙</button>
+
+
+                <button class="hamburger" id="hamburger"
+                    onclick="toggleMenu()"><span></span><span></span><span></span></button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="page-hero">
+        <h1>Barcha E'lonlar</h1>
+        <p>Minglab e'lonlar orasidan keragingizni toping</p>
+    </section>
+
+    <div class="section">
+        <div class="container">
+
+            <!-- ===== AI SEARCH ===== -->
+            <div class="ai-search-wrap" id="aiSearchWrap">
+                <div class="ai-search-label">🤖 AI Qidiruv (Sun'iy intellekt)</div>
+                <div class="ai-search-input-row">
+                    <input type="text" class="ai-search-input" id="aiInput"
+                        placeholder='Masalan: "Toshkentda 3 kunlik uylar 500k gacha"'
+                        onkeydown="if(event.key==='Enter')runAISearch()" />
+                    <button class="ai-search-btn" onclick="runAISearch()">🔍 AI Qidirish</button>
+                </div>
+                <div class="ai-examples">
+                    <span class="ai-example-tag" onclick="setAIExample(this)">Toshkentda arzon uylar</span>
+                    <span class="ai-example-tag" onclick="setAIExample(this)">Premium mashinalar Yunusobodda</span>
+                    <span class="ai-example-tag" onclick="setAIExample(this)">Samarqand 2 kunlik, oilaviy</span>
+                    <span class="ai-example-tag" onclick="setAIExample(this)">Kamera ijara 150k gacha</span>
+                    <span class="ai-example-tag" onclick="setAIExample(this)">Buxoro tarixiy uylar</span>
+                </div>
+                <div class="ai-thinking" id="aiThinking">
+                    <div class="ai-dot"></div>
+                    <div class="ai-dot"></div>
+                    <div class="ai-dot"></div>
+                    <span>AI tahlil qilmoqda...</span>
+                </div>
+            </div>
+
+            <!-- Toolbar -->
+            <div class="listings-toolbar">
+                <div class="search-inline" style="display:flex;gap:10px;flex:1;max-width:500px;">
+                    <input type="text" id="pageSearch" placeholder="🔍 Qidirish..."
+                        style="flex:1;padding:10px 16px;border:1.5px solid var(--border);border-radius:12px;font-family:var(--font);font-size:14px;outline:none;background:var(--white);color:var(--dark);"
+                        oninput="filterListings()" />
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;">
+                    <span class="listings-count" id="countLabel">12 ta e'lon</span>
+                    <select class="sort-select" id="sortSelect" onchange="filterListings()">
+                        <option value="new">Yangilardan</option>
+                        <option value="price-asc">Narxi: arzondan</option>
+                        <option value="price-desc">Narxi: qimmatdan</option>
+                        <option value="rating">Reyting bo'yicha</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- ===== INTERACTIVE MAP ===== -->
+            <div class="map-section">
+                <div class="map-section-header">
+                    <h3>🗺️ Interaktiv Xarita Filtri</h3>
+                    <button class="map-toggle-btn" id="mapToggleBtn" onclick="toggleMapFilter()">▼ Xaritani
+                        ko'rsatish</button>
+                </div>
+                <div class="map-container-wrap" id="mapWrap">
+                    <div class="map-bg">
+                        <iframe id="listingsMapFrame" class="map-osm"
+                            src="https://www.openstreetmap.org/export/embed.html?bbox=59.0,37.0,73.0,46.0&layer=mapnik"
+                            allowfullscreen loading="lazy"></iframe>
+                    </div>
+                </div>
+                <!-- City pills -->
+                <div class="city-filter-pills">
+                    <span style="font-size:13px;font-weight:600;color:var(--gray);margin-right:4px;">Shahar:</span>
+                    <button class="city-pill active" data-city="" onclick="setCityFilter(this, '')">🌍 Barchasi</button>
+                    <button class="city-pill" data-city="Toshkent" onclick="setCityFilter(this, 'Toshkent')">📍
+                        Toshkent</button>
+                    <button class="city-pill" data-city="Samarqand" onclick="setCityFilter(this, 'Samarqand')">📍
+                        Samarqand</button>
+                    <button class="city-pill" data-city="Buxoro" onclick="setCityFilter(this, 'Buxoro')">📍
+                        Buxoro</button>
+                    <button class="city-pill" data-city="Namangan" onclick="setCityFilter(this, 'Namangan')">📍
+                        Namangan</button>
+                </div>
+            </div>
+
+            <div class="listings-page-layout">
+                <!-- Sidebar Filters -->
+                <aside class="filter-sidebar">
+                    <h3>🔧 Filterlar</h3>
+
+                    <div class="filter-group">
+                        <label>Kategoriya</label>
+                        <select id="filterCat" onchange="filterListings()">
+                            <option value="">Barcha kategoriyalar</option>
+                            <option value="uy">🏠 Uylar</option>
+                            <option value="mashina">🚗 Mashinalar</option>
+                            <option value="texnika">🔌 Texnika</option>
+                            <option value="mebel">🪑 Mebel</option>
+                            <option value="tadbir">🎉 Tadbir jihozlari</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Shahar</label>
+                        <select id="filterCity" onchange="filterListings()">
+                            <option value="">Barcha shaharlar</option>
+                            <option value="Toshkent">Toshkent</option>
+                            <option value="Samarqand">Samarqand</option>
+                            <option value="Buxoro">Buxoro</option>
+                            <option value="Namangan">Namangan</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Max. narx (so'm/kun): <strong id="priceLabel">1,000,000</strong></label>
+                        <input type="range" id="filterPrice" min="10000" max="1000000" step="10000" value="1000000"
+                            oninput="updatePriceLabel(this.value);filterListings()" />
+                        <div class="price-range-display"><span>10,000</span><span>1,000,000</span></div>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Xususiyatlar</label>
+                        <div class="filter-checkboxes">
+                            <label><input type="checkbox" value="premium" onchange="filterListings()" /> ⭐ Premium
+                                e'lonlar</label>
+                            <label><input type="checkbox" value="verified" onchange="filterListings()" /> ✔
+                                Tasdiqlangan</label>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Min. reytingi</label>
+                        <select id="filterRating" onchange="filterListings()">
+                            <option value="0">Barchasi</option>
+                            <option value="4">4.0+</option>
+                            <option value="4.5">4.5+</option>
+                            <option value="4.8">4.8+</option>
+                        </select>
+                    </div>
+
+                    <button class="clear-filters-btn" onclick="clearFilters()">✕ Filterlarni tozalash</button>
+                </aside>
+
+                <!-- Main Grid -->
+                <main class="listings-main">
+                    <div class="listings-grid" id="listingsPageGrid"></div>
+
+                    <!-- ===== TAVSIYaLAR ===== -->
+                    <div class="recommend-section" id="recommendSection" style="display:none;">
+                        <h2>🎯 Siz ko'rgan e'lonlarga o'xshash</h2>
+                        <div class="listings-grid" id="recommendGrid"></div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="detailModal" onclick="closeModal(event)">
+        <div class="modal-box" id="modalBox">
+            <button class="modal-close" onclick="closeDetailModal()">✕</button>
+            <div class="modal-content" id="modalContent"></div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <a href="index.html" class="logo"><span class="logo-icon">🏠</span><span
+                        class="logo-text">IjaraGo</span></a>
+                <p>O'zbekistonda eng qulay ijara platformasi.</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-col">
+                    <h4>Sayt</h4>
+                    <a href="listings.html">E'lonlar</a>
+                    <a href="categories.html">Kategoriyalar</a>
+                    <a href="faq.html">FAQ</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Hisob</h4>
+                    <a href="login.html">Kirish</a>
+                    <a href="register.html">Ro'yxatdan o'tish</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 IjaraGo.</p>
+        </div>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="main.js"></script>
+    <script src="auth.js"></script>
+    <script src="listings-store.js"></script>
+    <script>
+        // ===== PRICE LABEL =====
+        function updatePriceLabel(val) {
+            document.getElementById('priceLabel').textContent = parseInt(val).toLocaleString('uz-UZ');
+        }
+
+        function getActiveCheckboxValues() {
+            const checked = document.querySelectorAll('.filter-checkboxes input[type="checkbox"]:checked');
+            return Array.from(checked).map(cb => cb.value);
+        }
+
+        // ===== CITY FILTER VIA MAP PILLS =====
+        function setCityFilter(el, city) {
+            document.querySelectorAll('.city-pill').forEach(p => p.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById('filterCity').value = city;
+            filterListings();
+            // Update map view
+            const cities = {
+                '': { bbox: '59.0,37.0,73.0,46.0' },
+                'Toshkent': { bbox: '68.9,41.1,69.5,41.5' },
+                'Samarqand': { bbox: '66.7,39.5,67.2,39.8' },
+                'Buxoro': { bbox: '64.1,39.6,64.6,39.9' },
+                'Namangan': { bbox: '71.5,40.8,72.0,41.1' },
+            };
+            const c = cities[city] || cities[''];
+            document.getElementById('listingsMapFrame').src =
+                https://www.openstreetmap.org/export/embed.html?bbox=${c.bbox}&layer=mapnik`;
+        }
+
+        // ===== TOGGLE MAP =====
+        let mapOpen = false;
+        function toggleMapFilter() {
+            mapOpen = !mapOpen;
+            document.getElementById('mapWrap').classList.toggle('open', mapOpen);
+            document.getElementById('mapToggleBtn').textContent = mapOpen ? '▲ Xaritani yopish' : '▼ Xaritani ko\'rsatish';
+        }
+
+        // ===== AI SEARCH =====
+        function setAIExample(el) {
+            document.getElementById('aiInput').value = el.textContent;
+        }
+
+        function runAISearch() {
+            const query = document.getElementById('aiInput').value.trim();
+            if (!query) return showToast('Qidiruv so\'rovini kiriting!', 'info');
+            document.getElementById('aiThinking').classList.add('show');
+
+            setTimeout(() => {
+                document.getElementById('aiThinking').classList.remove('show');
+                const parsed = parseAIQuery(query);
+                applyAIParsed(parsed);
+                showToast('🤖 AI filter qo\'llanildi: ' + JSON.stringify(parsed).replace(/[{}"]/g, '').replace(/,/g, ' · '), 'success');
+            }, 1600);
+        }
+
+        function parseAIQuery(q) {
+            q = q.toLowerCase();
+            const result = {};
+            // City detection
+            if (q.includes('toshkent')) result.city = 'Toshkent';
+            else if (q.includes('samarqand')) result.city = 'Samarqand';
+            else if (q.includes('buxoro') || q.includes('bukhara')) result.city = 'Buxoro';
+            else if (q.includes('namangan')) result.city = 'Namangan';
+            // Category
+            if (q.includes('uy') || q.includes('kvartira') || q.includes('xona') || q.includes('oilaviy')) result.cat = 'uy';
+            else if (q.includes('mashina') || q.includes('avto') || q.includes('toyota') || q.includes('chevrolet')) result.cat = 'mashina';
+            else if (q.includes('kamera') || q.includes('texnika') || q.includes('drone') || q.includes('proyektor')) result.cat = 'texnika';
+            else if (q.includes('mebel') || q.includes('kurs')) result.cat = 'mebel';
+            // Price — extract numbers like 500k, 300k, 500,000, 300000
+            const priceMatch = q.match(/(\d[\d,\.]*)\s*(k|ming)?/);
+            if (priceMatch) {
+                let val = parseFloat(priceMatch[1].replace(',', ''));
+                if (priceMatch[2] === 'k') val *= 1000;
+                if (val > 1000 && val <= 5000000) result.maxPrice = val;
+            }
+            // Premium
+            if (q.includes('premium') || q.includes('yaxshi') || q.includes('zo\'r')) result.premium = true;
+            return result;
+        }
+
+        function applyAIParsed(p) {
+            if (p.city) {
+                document.getElementById('filterCity').value = p.city;
+                document.querySelectorAll('.city-pill').forEach(pill => {
+                    pill.classList.toggle('active', pill.dataset.city === p.city);
+                });
+            }
+            if (p.cat) document.getElementById('filterCat').value = p.cat;
+            if (p.maxPrice) {
+                const clamped = Math.min(p.maxPrice, 1000000);
+                document.getElementById('filterPrice').value = clamped;
+                updatePriceLabel(clamped);
+            }
+            filterListings();
+        }
+
+        // ===== MAIN FILTER =====
+        function filterListings() {
+            const q = (document.getElementById('pageSearch')?.value || '').toLowerCase();
+            const cat = document.getElementById('filterCat')?.value || '';
+            const city = document.getElementById('filterCity')?.value || '';
+            const maxPrice = parseInt(document.getElementById('filterPrice')?.value || 1000000);
+            const minRating = parseFloat(document.getElementById('filterRating')?.value || 0);
+            const checkboxes = getActiveCheckboxValues();
+            const sortBy = document.getElementById('sortSelect')?.value || 'new';
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlCat = urlParams.get('cat') || '';
+            const urlQ = urlParams.get('q') || '';
+
+            const ALL_LISTINGS = STORE.getAllMerged();
+            let filtered = ALL_LISTINGS.filter(item => {
+                const matchQ = !q && !urlQ ? true : item.title.toLowerCase().includes(q || urlQ.toLowerCase()) || item.description.toLowerCase().includes(q || urlQ.toLowerCase());
+                const matchCat = !cat && !urlCat ? true : item.category === (cat || urlCat);
+                const matchCity = !city ? true : item.location.includes(city);
+                const matchPrice = item.price <= maxPrice;
+                const matchRating = item.rating >= minRating;
+                const matchPremium = !checkboxes.includes('premium') || item.premium;
+                const matchVerified = !checkboxes.includes('verified') || item.verified;
+                return matchQ && matchCat && matchCity && matchPrice && matchRating && matchPremium && matchVerified;
+            });
+
+            if (sortBy === 'price-asc') filtered.sort((a, b) => a.price - b.price);
+            else if (sortBy === 'price-desc') filtered.sort((a, b) => b.price - a.price);
+            else if (sortBy === 'rating') filtered.sort((a, b) => b.rating - a.rating);
+
+            const grid = document.getElementById('listingsPageGrid');
+            const label = document.getElementById('countLabel');
+            label.textContent = filtered.length + ' ta e\'lon';
+
+            if (filtered.length === 0) {
+                grid.innerHTML = <div class="no-results" style="grid-column:1/-1;">
+                    <div class="no-icon">😕</div>
+                    <h3>E'lonlar topilmadi</h3>
+                    <p>Filterlarni o'zgartirib ko'ring</p>
+                </div>`;
+            } else {
+                grid.innerHTML = filtered.map(item => createCard(item)).join('');
+            }
+
+            // Recommendations
+            renderRecommendations(filtered);
+        }
+
+        function clearFilters() {
+            document.getElementById('filterCat').value = '';
+            document.getElementById('filterCity').value = '';
+            document.getElementById('filterPrice').value = 1000000;
+            document.getElementById('filterRating').value = 0;
+            document.getElementById('pageSearch').value = '';
+            document.getElementById('aiInput').value = '';
+            updatePriceLabel(1000000);
+            document.querySelectorAll('.filter-checkboxes input').forEach(cb => cb.checked = false);
+            document.querySelectorAll('.city-pill').forEach(p => p.classList.remove('active'));
+            document.querySelector('.city-pill[data-city=""]').classList.add('active');
+            filterListings();
+        }
+
+        // ===== RECOMMENDATIONS =====
+        // Track viewed categories using localStorage
+        function renderRecommendations(currentFiltered) {
+            const viewed = JSON.parse(localStorage.getItem('ij_viewed_cats') || '[]');
+            if (viewed.length === 0) {
+                document.getElementById('recommendSection').style.display = 'none';
+                return;
+            }
+            // Find listings in same category as most viewed
+            const topCat = viewed[viewed.length - 1];
+            const recs = LISTINGS.filter(l => l.category === topCat && !currentFiltered.find(f => f.id === l.id)).slice(0, 3);
+            if (recs.length === 0) {
+                document.getElementById('recommendSection').style.display = 'none';
+                return;
+            }
+            document.getElementById('recommendSection').style.display = 'block';
+            document.getElementById('recommendGrid').innerHTML = recs.map(item => createCard(item)).join('');
+        }
+
+        // ===== INIT =====
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const cat = params.get('cat');
+            const q = params.get('q');
+            if (cat) document.getElementById('filterCat').value = cat;
+            if (q) document.getElementById('pageSearch').value = q;
+            filterListings();
+        });
+    </script>
+
+    <script src="support-chat.js"></script>
+</body>
+
+</html>

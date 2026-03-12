@@ -1,0 +1,800 @@
+﻿<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E'lon tafsiloti — IjaraGo</title>
+    <meta name="description" content="E'lon tafsiloti — IjaraGo — O'zbekistonda eng qulay ijara platformasi." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="enhancements.css" />
+    <style>
+        /* ===== GALLERY ===== */
+        .gallery-hero {
+            position: relative;
+            background: #0f172a;
+            padding-top: 72px;
+        }
+
+        .gallery-main-img {
+            width: 100%;
+            height: 460px;
+            object-fit: cover;
+            display: block;
+            cursor: zoom-in;
+            transition: opacity .3s;
+        }
+
+        .gallery-hero-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(to top, rgba(15,23,42,.9), transparent);
+            pointer-events: none;
+        }
+
+        .gallery-hero-badges {
+            position: absolute;
+            top: 88px;
+            left: 28px;
+            display: flex;
+            gap: 8px;
+            z-index: 2;
+        }
+
+        .gallery-thumbs {
+            display: flex;
+            gap: 8px;
+            padding: 10px 28px;
+            background: #0f172a;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,.2) transparent;
+        }
+
+        .gallery-thumb {
+            width: 100px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            flex-shrink: 0;
+            transition: .2s;
+            opacity: .65;
+        }
+
+        .gallery-thumb.active,
+        .gallery-thumb:hover {
+            border-color: var(--primary);
+            opacity: 1;
+        }
+
+        .gallery-count-badge {
+            position: absolute;
+            bottom: 80px;
+            right: 28px;
+            background: rgba(0,0,0,.6);
+            color: white;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 100px;
+            backdrop-filter: blur(8px);
+            z-index: 2;
+        }
+
+        /* ===== LIGHTBOX ===== */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.95);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .3s;
+        }
+
+        .lightbox.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .lightbox-img {
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 40px 100px rgba(0,0,0,.8);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            background: rgba(255,255,255,.15);
+            color: white;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 22px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .lightbox-close:hover { background: rgba(255,255,255,.3); }
+
+        .lightbox-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,.15);
+            color: white;
+            border: none;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .lightbox-arrow:hover { background: rgba(255,255,255,.3); }
+        .lightbox-arrow.prev { left: 20px; }
+        .lightbox-arrow.next { right: 20px; }
+
+        /* ===== BODY LAYOUT ===== */
+        .detail-body {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 28px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 28px 24px 80px;
+        }
+
+        .detail-main {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 8px 30px rgba(0,0,0,.08);
+        }
+
+        body.dark .detail-main {
+            background: var(--card-bg);
+            border-color: var(--border);
+        }
+
+        .detail-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .sidebar-box {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 8px 30px rgba(0,0,0,.08);
+        }
+
+        body.dark .sidebar-box {
+            background: var(--card-bg);
+        }
+
+        /* ===== FEATURES ===== */
+        .feature-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 14px;
+            background: #eef2ff;
+            color: var(--primary);
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 600;
+            margin: 4px;
+        }
+
+        body.dark .feature-tag {
+            background: rgba(99,102,241,.15);
+        }
+
+        /* ===== PRICE CALC ===== */
+        .price-calc-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 14px;
+        }
+
+        .price-calc-row.total {
+            font-weight: 800;
+            font-size: 16px;
+            border-top: 2px solid var(--border);
+            margin-top: 8px;
+            padding-top: 12px;
+        }
+
+        /* ===== MAP ===== */
+        .map-frame {
+            width: 100%;
+            height: 200px;
+            border-radius: 14px;
+            border: none;
+            display: block;
+        }
+
+        /* ===== REVIEWS ===== */
+        .review-item {
+            padding: 18px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .review-item:last-child { border: none; }
+
+        .star-select {
+            display: flex;
+            gap: 4px;
+            margin: 12px 0;
+        }
+
+        .star-select span {
+            font-size: 30px;
+            cursor: pointer;
+            transition: .15s;
+            color: #d1d5db;
+            line-height: 1;
+        }
+
+        .star-select span.lit { color: #f59e0b !important; }
+
+        /* ===== OWNER LISTINGS ===== */
+        .owner-listing-item {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .owner-listing-item:last-child { border: none; }
+        .owner-listing-item:hover { opacity: .8; }
+
+        .owner-listing-img {
+            width: 60px;
+            height: 46px;
+            border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        /* ===== NOTIFICATION BELL ===== */
+        .notif-bell {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            font-size: 24px;
+            border: none;
+            border-radius: 50%;
+            box-shadow: 0 8px 24px rgba(99,102,241,.5);
+            cursor: pointer;
+            z-index: 100;
+            transition: .2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notif-bell:hover { transform: scale(1.1); }
+
+        .notif-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media(max-width:900px) {
+            .detail-body { grid-template-columns: 1fr; }
+            .gallery-main-img { height: 300px; }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo"><span class="logo-icon">🏠</span><span class="logo-text">IjaraGo</span></a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Bosh sahifa</a></li>
+                <li><a href="listings.html" class="active">E'lonlar</a></li>
+                <li><a href="categories.html">Kategoriyalar</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="dark-toggle" id="darkToggle" onclick="toggleDark()" title="Dark mode">🌙</button>
+                
+                
+                <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== GALLERY ===== -->
+    <div class="gallery-hero" id="galleryHero">
+        <img id="mainGalleryImg" class="gallery-main-img" src="" alt="" onclick="openLightbox(currentThumb)" />
+        <div class="gallery-hero-overlay"></div>
+        <div class="gallery-hero-badges" id="heroBadges"></div>
+        <div class="gallery-count-badge" id="galleryCountBadge"></div>
+        <div class="gallery-thumbs" id="galleryThumbs"></div>
+    </div>
+
+    <!-- ===== LIGHTBOX ===== -->
+    <div class="lightbox" id="lightbox" onclick="closeLightboxOnBg(event)">
+        <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+        <button class="lightbox-arrow prev" onclick="lightboxNav(-1)">‹</button>
+        <img class="lightbox-img" id="lightboxImg" src="" alt="" />
+        <button class="lightbox-arrow next" onclick="lightboxNav(1)">›</button>
+    </div>
+
+    <!-- ===== BODY ===== -->
+    <div class="detail-body">
+        <!-- Main -->
+        <div class="detail-main">
+            <div id="categoryLabel" style="font-size:12px;color:var(--primary);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;"></div>
+            <h1 id="detailTitle" style="font-size:28px;font-weight:900;margin-bottom:12px;"></h1>
+            <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:20px;">
+                <span id="detailLocation" style="color:var(--gray);font-size:14px;"></span>
+                <span id="detailRating" style="font-weight:700;color:#f59e0b;font-size:15px;cursor:pointer;" onclick="scrollToReviews()"></span>
+            </div>
+            <p id="detailDesc" style="color:var(--dark-3);font-size:15px;line-height:1.8;margin-bottom:24px;"></p>
+
+            <h3 style="font-size:17px;font-weight:800;margin-bottom:12px;">✨ Imkoniyatlar</h3>
+            <div id="featuresList" style="margin-bottom:32px;"></div>
+
+            <!-- ===== XARITA ===== -->
+            <h3 style="font-size:17px;font-weight:800;margin-bottom:14px;">🗺️ Joylashuv xaritasi</h3>
+            <div id="mapContainer" style="border-radius:14px;overflow:hidden;margin-bottom:32px;border:1.5px solid var(--border);">
+                <iframe id="mapFrame" class="map-frame" src="" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+
+            <!-- ===== EGANING BOSHQA E'LONLARI ===== -->
+            <h3 style="font-size:17px;font-weight:800;margin-bottom:14px;">🏠 Eganing boshqa e'lonlari</h3>
+            <div id="ownerOtherListings" style="margin-bottom:32px;"></div>
+
+            <!-- ===== SHARHLAR ===== -->
+            <div id="reviewsAnchor">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+                    <h3 style="font-size:17px;font-weight:800;">⭐ Sharhlar <span id="reviewCount" style="color:var(--gray);font-weight:500;font-size:14px;"></span></h3>
+                    <div id="avgStarsDisplay" style="font-size:22px;color:#f59e0b;font-weight:800;"></div>
+                </div>
+
+                <!-- Reyting breakdown -->
+                <div id="ratingBreakdown" style="margin-bottom:20px;"></div>
+
+                <div id="reviewsList"></div>
+
+                <!-- Sharh yozish -->
+                <div style="background:var(--bg);border-radius:14px;padding:20px;margin-top:16px;border:1.5px dashed var(--border);">
+                    <h4 style="font-size:15px;font-weight:700;margin-bottom:12px;">✍️ Sharh qoldiring</h4>
+                    <div class="star-select" id="starSelect">
+                        <span onclick="setRating(1)" data-val="1">★</span>
+                        <span onclick="setRating(2)" data-val="2">★</span>
+                        <span onclick="setRating(3)" data-val="3">★</span>
+                        <span onclick="setRating(4)" data-val="4">★</span>
+                        <span onclick="setRating(5)" data-val="5">★</span>
+                    </div>
+                    <textarea id="reviewText" rows="3" placeholder="Tajribangizni baham ko'ring..."
+                        style="width:100%;padding:12px;border:1.5px solid var(--border);border-radius:12px;font-family:var(--font);font-size:14px;outline:none;resize:vertical;margin-bottom:12px;background:var(--white);color:var(--dark);"></textarea>
+                    <!-- Rasm yuklash -->
+                    <div style="margin-bottom:12px;">
+                        <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">📸 Rasm biriktirish (ixtiyoriy)</label>
+                        <input type="file" id="reviewImgInput" accept="image/*" multiple style="font-size:13px;" onchange="previewReviewImgs()" />
+                        <div id="reviewImgPreview" style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;"></div>
+                    </div>
+                    <button class="btn btn-primary" onclick="submitReview()">📤 Sharh yuborish</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="detail-sidebar">
+            <!-- Narx box -->
+            <div class="sidebar-box">
+                <div style="font-size:30px;font-weight:900;color:var(--primary);" id="sidebarPrice"></div>
+                <div style="color:var(--gray);font-size:13px;margin-bottom:20px;" id="sidebarPriceType"></div>
+
+                <div style="margin-bottom:16px;">
+                    <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">📅 Boshlanish</label>
+                    <input type="date" id="dateStart" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:12px;font-family:var(--font);font-size:14px;outline:none;background:var(--white);color:var(--dark);" oninput="calcPrice()" />
+                </div>
+                <div style="margin-bottom:20px;">
+                    <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">📅 Tugash</label>
+                    <input type="date" id="dateEnd" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:12px;font-family:var(--font);font-size:14px;outline:none;background:var(--white);color:var(--dark);" oninput="calcPrice()" />
+                </div>
+
+                <div id="priceCalc" style="display:none;background:var(--bg);border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid var(--border);">
+                    <div class="price-calc-row"><span>Kunlik narx</span><span id="pcDaily"></span></div>
+                    <div class="price-calc-row"><span>Kunlar soni</span><span id="pcDays"></span></div>
+                    <div class="price-calc-row"><span>Xizmat haqi (5%)</span><span id="pcFee"></span></div>
+                    <div class="price-calc-row total"><span>Jami</span><span id="pcTotal" style="color:var(--primary);"></span></div>
+                </div>
+
+                <a id="bookBtn" href="booking.html" class="btn btn-primary btn-lg full-width" style="margin-bottom:10px;">📅 Band qilish</a>
+                <button class="btn btn-outline full-width" id="wishlistBtn" onclick="toggleWishlist(this)">🤍 Saqlash</button>
+            </div>
+
+            <!-- Ega -->
+            <div class="sidebar-box">
+                <h4 style="font-size:15px;font-weight:800;margin-bottom:14px;">👤 Ega haqida</h4>
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+                    <img id="ownerImg" src="" alt="" style="width:56px;height:56px;border-radius:50%;object-fit:cover;border:3px solid var(--primary);" />
+                    <div>
+                        <div id="ownerName" style="font-weight:700;font-size:15px;"></div>
+                        <div id="ownerStatus" style="font-size:12px;color:var(--success);font-weight:600;"></div>
+                        <div id="ownerStats" style="font-size:12px;color:var(--gray);margin-top:2px;"></div>
+                    </div>
+                </div>
+                <div style="display:flex;gap:8px;">
+                    <a href="tel:+998901234567" class="btn btn-primary" style="flex:1;justify-content:center;">📞 Qo'ng'iroq</a>
+                    <a href="chat.html" class="btn btn-outline" style="flex:1;justify-content:center;">💬 Chat</a>
+                </div>
+            </div>
+
+            <!-- Xarita (sidebar mini) -->
+            <div class="sidebar-box">
+                <h4 style="font-size:15px;font-weight:800;margin-bottom:14px;">📍 Joylashuv</h4>
+                <div id="sidebarMapContainer" style="border-radius:12px;overflow:hidden;margin-bottom:12px;">
+                    <iframe id="sidebarMapFrame" class="map-frame" src="" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="height:160px;"></iframe>
+                </div>
+                <div id="mapLocation" style="font-size:13px;color:var(--gray);text-align:center;"></div>
+            </div>
+
+            <!-- Xavfsizlik -->
+            <div class="sidebar-box" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid #86efac;">
+                <h4 style="font-size:14px;font-weight:800;color:#166534;margin-bottom:10px;">🛡️ Xavfsiz ijara</h4>
+                <p style="font-size:12px;color:#166534;line-height:1.7;">IjaraGo platformasi orqali bron qilingan barcha ijaralar himoyalangan. To'lov egaga faqat ijara boshlanganidan keyin o'tkaziladi.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Bell -->
+    <button class="notif-bell" id="notifBell" onclick="triggerNotif()" title="Bildirishnomalar">
+        🔔
+        <span class="notif-badge" id="notifBadge" style="display:none;">1</span>
+    </button>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <a href="index.html" class="logo"><span class="logo-icon">🏠</span><span class="logo-text">IjaraGo</span></a>
+                <p>O'zbekistonda eng qulay ijara platformasi.</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-col">
+                    <h4>Sayt</h4>
+                    <a href="listings.html">E'lonlar</a>
+                    <a href="faq.html">FAQ</a>
+                    <a href="contact.html">Aloqa</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Hisob</h4>
+                    <a href="login.html">Kirish</a>
+                    <a href="register.html">Ro'yxatdan o'tish</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom"><p>© 2026 IjaraGo. Barcha huquqlar himoyalangan.</p></div>
+    </footer>
+
+    <div class="toast-container" id="toastContainer"></div>
+    <script src="data.js"></script>
+    <script src="main.js"></script>
+    <script>
+        // ===== LOAD LISTING =====
+        const params = new URLSearchParams(location.search);
+        const id = parseInt(params.get('id')) || 1;
+        const item = LISTINGS.find(l => l.id === id) || LISTINGS[0];
+
+        document.title = item.title + ' — IjaraGo';
+
+        // ===== GALLERY IMAGES (multiple from same source with variations) =====
+        const galleryImgs = [
+            item.image,
+            item.image.replace('w=600', 'w=800') + '&fit=crop&crop=left',
+            item.image.replace('w=600', 'w=700') + '&fit=crop&crop=right',
+            item.image.replace('w=600', 'w=900') + '&fit=crop&crop=top',
+            item.image.replace('w=600', 'w=750') + '&fit=crop&crop=bottom',
+        ];
+
+        let currentThumb = 0;
+
+        function setMainImg(idx) {
+            currentThumb = idx;
+            document.getElementById('mainGalleryImg').src = galleryImgs[idx];
+            document.getElementById('mainGalleryImg').alt = item.title;
+            document.querySelectorAll('.gallery-thumb').forEach((t, i) => {
+                t.classList.toggle('active', i === idx);
+            });
+            document.getElementById('galleryCountBadge').textContent = 📷 ${idx + 1} / ${galleryImgs.length}`;
+        }
+
+        // Build thumbs
+        const thumbsEl = document.getElementById('galleryThumbs');
+        galleryImgs.forEach((src, i) => {
+            const img = document.createElement('img');
+            img.className = 'gallery-thumb' + (i === 0 ? ' active' : '');
+            img.src = src;
+            img.alt = Rasm ${i + 1}`;
+            img.onclick = () => setMainImg(i);
+            img.onerror = () => img.style.display = 'none';
+            thumbsEl.appendChild(img);
+        });
+
+        setMainImg(0);
+
+        // Badges
+        let badges = '';
+        if (item.premium) badges += '<span class="badge-premium">⭐ Premium</span>';
+        if (item.verified) badges += '<span class="badge-verified">✔ Tasdiqlangan</span>';
+        document.getElementById('heroBadges').innerHTML = badges;
+
+        // Main info
+        document.getElementById('categoryLabel').textContent = item.categoryLabel;
+        document.getElementById('detailTitle').textContent = item.title;
+        document.getElementById('detailLocation').textContent = '📍 ' + item.location;
+        document.getElementById('detailRating').textContent = '★ ' + item.rating + ' (' + item.reviews + ' sharh) →';
+        document.getElementById('detailDesc').textContent = item.description;
+        document.getElementById('featuresList').innerHTML = item.features.map(f => <span class="feature-tag">✓ ${f}</span>`).join('');
+
+        // Sidebar
+        document.getElementById('sidebarPrice').textContent = formatPrice(item.price);
+        document.getElementById('sidebarPriceType').textContent = '/ ' + item.priceType + '  ·  Min: ' + item.minDays + ' kun';
+        document.getElementById('ownerImg').src = item.ownerImg;
+        document.getElementById('ownerName').textContent = item.owner;
+        document.getElementById('ownerStatus').textContent = item.verified ? '✔ Tasdiqlangan ega' : 'Foydalanuvchi';
+        const ownerListings = LISTINGS.filter(l => l.owner === item.owner);
+        document.getElementById('ownerStats').textContent = ownerListings.length + ' ta e\'lon · ★ ' + item.rating;
+        document.getElementById('bookBtn').href = 'booking.html?id=' + item.id;
+
+        // Dates
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('dateStart').min = today;
+        document.getElementById('dateEnd').min = today;
+
+        // ===== GOOGLE MAPS =====
+        const city = item.location.split(',')[0].trim();
+        const mapQuery = encodeURIComponent(item.location);
+        const mapSrc = https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU3LuE&q=${mapQuery}&zoom=14`;
+        // Use OpenStreetMap as fallback (no API key needed)
+        const osmSrc = https://www.openstreetmap.org/export/embed.html?bbox=69.0,40.8,69.5,41.3&layer=mapnik&marker=41.0,69.2`;
+        // Use a nominatim-style embed
+        const cities = {
+            'Toshkent': { lat: 41.2995, lon: 69.2401 },
+            'Samarqand': { lat: 39.6542, lon: 66.9597 },
+            'Buxoro': { lat: 39.7747, lon: 64.4286 },
+            'Namangan': { lat: 41.0, lon: 71.67 },
+        };
+        const cityCoords = cities[city] || cities['Toshkent'];
+        const bbox_offset = 0.04;
+        const osmUrl = https://www.openstreetmap.org/export/embed.html?bbox=${cityCoords.lon - bbox_offset},${cityCoords.lat - bbox_offset},${cityCoords.lon + bbox_offset},${cityCoords.lat + bbox_offset}&layer=mapnik&marker=${cityCoords.lat},${cityCoords.lon}`;
+
+        document.getElementById('mapFrame').src = osmUrl;
+        document.getElementById('sidebarMapFrame').src = osmUrl;
+        document.getElementById('mapLocation').textContent = '📍 ' + item.location;
+
+        // ===== OWNER'S OTHER LISTINGS =====
+        const otherListings = LISTINGS.filter(l => l.owner === item.owner && l.id !== item.id).slice(0, 3);
+        const ownerOtherEl = document.getElementById('ownerOtherListings');
+        if (otherListings.length === 0) {
+            ownerOtherEl.innerHTML = '<p style="color:var(--gray);font-size:14px;">Bu eganing boshqa e\'lonlari topilmadi.</p>';
+        } else {
+            ownerOtherEl.innerHTML = otherListings.map(l => 
+                <div class="owner-listing-item" onclick="location.href='listing-detail.html?id=${l.id}'">
+                    <img src="${l.image}" class="owner-listing-img" alt="${l.title}" onerror="this.src='https://via.placeholder.com/60x46'" />
+                    <div style="flex:1;min-width:0;">
+                        <div style="font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${l.title}</div>
+                        <div style="font-size:12px;color:var(--gray);">📍 ${l.location}</div>
+                    </div>
+                    <div style="font-weight:800;color:var(--primary);font-size:13px;white-space:nowrap;">${formatPrice(l.price)}</div>
+                </div>
+            ).join('');
+        }
+
+        // ===== PRICE CALCULATOR =====
+        function calcPrice() {
+            const s = document.getElementById('dateStart').value;
+            const e = document.getElementById('dateEnd').value;
+            if (!s || !e || e <= s) { document.getElementById('priceCalc').style.display = 'none'; return; }
+            const days = Math.ceil((new Date(e) - new Date(s)) / 86400000);
+            const base = item.price * days;
+            const fee = Math.round(base * 0.05);
+            const total = base + fee;
+            document.getElementById('priceCalc').style.display = 'block';
+            document.getElementById('pcDaily').textContent = formatPrice(item.price);
+            document.getElementById('pcDays').textContent = days + ' kun';
+            document.getElementById('pcFee').textContent = formatPrice(fee);
+            document.getElementById('pcTotal').textContent = formatPrice(total);
+        }
+
+        // ===== WISHLIST =====
+        function toggleWishlist(btn) {
+            const saved = btn.textContent.includes('❤️');
+            btn.textContent = saved ? '🤍 Saqlash' : '❤️ Saqlangan';
+            btn.style.borderColor = saved ? '' : 'var(--danger)';
+            btn.style.color = saved ? '' : 'var(--danger)';
+            showToast(saved ? "Saqlanganlardan olib tashlandi" : "Saqlanganlar ro'yxatiga qo'shildi ❤️", 'success');
+        }
+
+        // ===== LIGHTBOX =====
+        function openLightbox(idx) {
+            currentThumb = idx;
+            document.getElementById('lightboxImg').src = galleryImgs[idx];
+            document.getElementById('lightbox').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function closeLightboxOnBg(e) {
+            if (e.target === document.getElementById('lightbox')) closeLightbox();
+        }
+
+        function lightboxNav(dir) {
+            currentThumb = (currentThumb + dir + galleryImgs.length) % galleryImgs.length;
+            document.getElementById('lightboxImg').src = galleryImgs[currentThumb];
+            setMainImg(currentThumb);
+        }
+
+        document.addEventListener('keydown', e => {
+            if (!document.getElementById('lightbox').classList.contains('open')) return;
+            if (e.key === 'ArrowRight') lightboxNav(1);
+            if (e.key === 'ArrowLeft') lightboxNav(-1);
+            if (e.key === 'Escape') closeLightbox();
+        });
+
+        // ===== REVIEWS =====
+        let selectedRating = 0;
+        const DEMO_REVIEWS = [
+            { name: 'Alisher T.', rating: 5, text: "Zo'r joy! Hamma narsa rasmga mos keldi. Ega juda mulozamatli.", date: '28 Fev 2026', avatar: 'https://i.pravatar.cc/40?img=12', imgs: [] },
+            { name: 'Malika R.', rating: 4, text: "Yaxshi, lekin WiFi ba'zida uzildi. Umuman olganda 4/5.", date: '15 Fev 2026', avatar: 'https://i.pravatar.cc/40?img=24', imgs: [] },
+            { name: 'Bobur Y.', rating: 5, text: "Ikkinchi marta kelayapman! Hammasi mukammal.", date: '2 Fev 2026', avatar: 'https://i.pravatar.cc/40?img=7', imgs: [] },
+            { name: 'Nodira S.', rating: 3, text: "O'rta darajada. Narxi biroz ko'p.", date: '10 Yan 2026', avatar: 'https://i.pravatar.cc/40?img=32', imgs: [] },
+        ];
+
+        function renderRatingBreakdown(list) {
+            const counts = [0, 0, 0, 0, 0];
+            list.forEach(r => counts[r.rating - 1]++);
+            const total = list.length;
+            const avg = total ? (list.reduce((s, r) => s + r.rating, 0) / total).toFixed(1) : '0.0';
+            document.getElementById('avgStarsDisplay').textContent = '★ ' + avg;
+            document.getElementById('ratingBreakdown').innerHTML = [5,4,3,2,1].map(star => {
+                const cnt = counts[star - 1];
+                const pct = total ? Math.round(cnt / total * 100) : 0;
+                return <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                    <span style="font-size:12px;color:#f59e0b;font-weight:700;width:16px;">${star}★</span>
+                    <div style="flex:1;height:6px;background:var(--border);border-radius:4px;overflow:hidden;">
+                        <div style="height:100%;background:#f59e0b;width:${pct}%;border-radius:4px;transition:.4s;"></div>
+                    </div>
+                    <span style="font-size:12px;color:var(--gray);width:24px;">${cnt}</span>
+                </div>`;
+            }).join('');
+        }
+
+        function renderReviews(list) {
+            document.getElementById('reviewCount').textContent = '(' + list.length + ' ta)';
+            renderRatingBreakdown(list);
+            document.getElementById('reviewsList').innerHTML = list.map(r => 
+                <div class="review-item">
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                        <img src="${r.avatar}" style="width:38px;height:38px;border-radius:50%;object-fit:cover;" onerror="this.src='https://i.pravatar.cc/40'"/>
+                        <div>
+                            <div style="font-weight:700;font-size:14px;">${r.name}</div>
+                            <div style="font-size:11px;color:var(--gray);">${r.date}</div>
+                        </div>
+                        <div style="margin-left:auto;color:#f59e0b;font-weight:700;">
+                            ${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}
+                        </div>
+                    </div>
+                    <p style="font-size:14px;color:var(--dark-3);line-height:1.6;">${r.text}</p>
+                    ${r.imgs && r.imgs.length ? <div style="display:flex;gap:6px;margin-top:10px;">${r.imgs.map(src => <img src="${src}" style="width:80px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer;" onclick="openLightbox(0)" />`).join('')}</div>` : ''}
+                </div>
+            ).join('');
+        }
+
+        renderReviews(DEMO_REVIEWS);
+
+        function setRating(val) {
+            selectedRating = val;
+            document.querySelectorAll('#starSelect span').forEach((s, i) => {
+                s.style.color = i < val ? '#f59e0b' : '#d1d5db';
+            });
+        }
+
+        let reviewImgDataUrls = [];
+        function previewReviewImgs() {
+            const files = document.getElementById('reviewImgInput').files;
+            reviewImgDataUrls = [];
+            const preview = document.getElementById('reviewImgPreview');
+            preview.innerHTML = '';
+            Array.from(files).slice(0, 4).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    reviewImgDataUrls.push(e.target.result);
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.cssText = 'width:80px;height:60px;object-fit:cover;border-radius:8px;';
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function submitReview() {
+            const text = document.getElementById('reviewText').value.trim();
+            if (!selectedRating) return showToast('Iltimos, yulduz tanlang!', 'info');
+            if (!text) return showToast('Sharh yozing!', 'info');
+            DEMO_REVIEWS.unshift({
+                name: 'Siz',
+                rating: selectedRating,
+                text,
+                date: 'Hozirgina',
+                avatar: 'https://i.pravatar.cc/40?img=30',
+                imgs: [...reviewImgDataUrls]
+            });
+            renderReviews(DEMO_REVIEWS);
+            document.getElementById('reviewText').value = '';
+            document.getElementById('reviewImgInput').value = '';
+            document.getElementById('reviewImgPreview').innerHTML = '';
+            reviewImgDataUrls = [];
+            selectedRating = 0;
+            document.querySelectorAll('#starSelect span').forEach(s => s.style.color = '#d1d5db');
+            showToast("Sharhingiz qo'shildi ⭐", 'success');
+        }
+
+        function scrollToReviews() {
+            document.getElementById('reviewsAnchor').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ===== NOTIFICATION =====
+        function triggerNotif() {
+            document.getElementById('notifBadge').style.display = 'none';
+            showToast('🔔 Sizning bronlaringiz yangilandi! Tafsilotlar uchun panelingizga kiring.', 'info');
+        }
+
+        // Simulate incoming notification after 5s
+        setTimeout(() => {
+            document.getElementById('notifBadge').style.display = 'flex';
+        }, 5000);
+    </script>
+
+    <script src="support-chat.js"></script>
+</body>
+
+</html>

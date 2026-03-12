@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ko'p So'raladigan Savollar (FAQ) — IjaraGo</title>
+    <meta name="description"
+        content="IjaraGo haqida eng ko'p so'raladigan savollar va javoblar. Ijara qilish, to'lov, bron va boshqa mavzularda to'liq ma'lumot." />
+    <meta name="keywords" content="IjaraGo FAQ, ijara savollar, ijara qanday ishlaydi, ijara to'lov" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://ijarego.uz/faq.html" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="enhancements.css" />
+</head>
+
+<body>
+
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo"><span class="logo-icon">🏠</span><span
+                    class="logo-text">IjaraGo</span></a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Bosh sahifa</a></li>
+                <li><a href="listings.html">E'lonlar</a></li>
+                <li><a href="categories.html">Kategoriyalar</a></li>
+                <li><a href="how-it-works.html">Qanday ishlaydi</a></li>
+                <li><a href="faq.html" class="active">FAQ</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="dark-toggle" id="darkToggle" onclick="toggleDark()" title="Dark mode">🌙</button>
+                <a href="login.html" class="btn btn-outline">Kirish</a>
+                <a href="register.html" class="btn btn-primary">Ro'yxatdan o'tish</a>
+                <button class="hamburger" id="hamburger"
+                    onclick="toggleMenu()"><span></span><span></span><span></span></button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="page-hero">
+        <h1>Ko'p So'raladigan Savollar ❓</h1>
+        <p>IjaraGo haqida eng tez-tez beriladigan savollarga javoblar</p>
+    </section>
+
+    <section class="section">
+        <div class="container">
+
+            <!-- Filter tabs -->
+            <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:48px;">
+                <button class="btn btn-primary tab-filter active" data-cat="all"
+                    onclick="filterFAQ('all',this)">Barchasi</button>
+                <button class="btn btn-outline tab-filter" data-cat="general"
+                    onclick="filterFAQ('general',this)">Umumiy</button>
+                <button class="btn btn-outline tab-filter" data-cat="renter" onclick="filterFAQ('renter',this)">Ijarachi
+                    uchun</button>
+                <button class="btn btn-outline tab-filter" data-cat="owner" onclick="filterFAQ('owner',this)">Ega
+                    uchun</button>
+                <button class="btn btn-outline tab-filter" data-cat="payment"
+                    onclick="filterFAQ('payment',this)">To'lov</button>
+            </div>
+
+            <div class="faq-list" id="faqList">
+                <!-- Injected by JS -->
+            </div>
+
+            <!-- CTA -->
+            <div
+                style="text-align:center;margin-top:64px;padding:48px;background:linear-gradient(135deg,#eef2ff,#f5f3ff);border-radius:var(--radius-lg);">
+                <div style="font-size:48px;margin-bottom:16px;">💬</div>
+                <h2 style="font-size:26px;font-weight:800;margin-bottom:10px;">Savolga javob topmadingizmi?</h2>
+                <p style="color:var(--gray);margin-bottom:24px;">Bizning qo'llab-quvvatlash jamoamiz 24/7 yordam
+                    berishga tayyor</p>
+                <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+                    <a href="chat.html" class="btn btn-primary btn-lg">💬 Online chat</a>
+                    <a href="tel:+998712345678" class="btn btn-outline btn-lg">📞 Qo'ng'iroq</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <a href="index.html" class="logo"><span class="logo-icon">🏠</span><span
+                        class="logo-text">IjaraGo</span></a>
+                <p>O'zbekistonda eng qulay ijara platformasi.</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-col">
+                    <h4>Sayt</h4>
+                    <a href="listings.html">E'lonlar</a>
+                    <a href="categories.html">Kategoriyalar</a>
+                    <a href="faq.html">FAQ</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Hisob</h4>
+                    <a href="login.html">Kirish</a>
+                    <a href="register.html">Ro'yxatdan o'tish</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Yordam</h4>
+                    <a href="contact.html">Aloqa</a>
+                    <a href="privacy.html">Maxfiylik</a>
+                    <a href="terms.html">Shartlar</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 IjaraGo. Barcha huquqlar himoyalangan.</p>
+        </div>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="main.js"></script>
+    <script>
+        const FAQS = [
+            { cat: 'general', q: 'IjaraGo nima?', a: "IjaraGo — O'zbekistondagi eng yirik online ijara platformasi. Bu yerda uy, mashina, texnika, mebel va boshqa ko'plab narsalarni ijaraga olish yoki berish mumkin." },
+            { cat: 'general', q: 'IjaraGo ishlatish bepulmi?', a: "Ro'yxatdan o'tish va saytdan foydalanish mutlaqo bepul! Faqat muvaffaqiyatli ijara amalga oshirilganda egadan 5% komissiya undiriladi." },
+            { cat: 'renter', q: 'Qanday qilib ijara olaman?', a: "1) Ro'yxatdan o'ting. 2) Kerakli narsani qidiring. 3) E'lonni ko'rib chiqing va egasi bilan muloqot qiling. 4) \"Bron qilish\" tugmasini bosing. 5) To'lovni amalga oshiring." },
+            { cat: 'renter', q: "To'lov qilgandan so'ng ijara berilmasa nima bo'ladi?", a: "Agar ega buyurtmani tasdiqlamasa yoki ijara amalga oshmasa, to'liq miqdori 3 ish kuni ichida qaytariladi. IjaraGo buyurtmachilarni himoya qiladi." },
+            { cat: 'renter', q: 'Depozit nima va u qaytariladimi?', a: "Depozit — buyumni muhofaza qilish uchun vaqtincha ushlab turiladigan miqdor. Buyumni to'liq va shikastsiz qaytarsangiz, depozit 3 ish kuni ichida to'liq qaytariladi." },
+            { cat: 'renter', q: 'Bronni bekor qilsam pul qaytariladi?', a: "Ha! Ijara boshlanishidan 48 soat oldin bekor qilsangiz, to'liq qaytiladi. 24-48 soat oldin 50% qaytiladi. 24 soatdan kam qolsa qaytarilmaydi." },
+            { cat: 'owner', q: "Qanday qilib e'lon joylashtirsam bo'ladi?", a: "Ro'yxatdan o'ting va \"Ega\" turini tanlang. So'ngra \"Yangi e'lon\" bo'limiga boring, zarur ma'lumotlarni to'ldiring. E'lon admin tomonidan 1-24 soat ichida tekshirib tasdiqlanadi." },
+            { cat: 'owner', q: 'Komissiya qancha?', a: "Har bir muvaffaqiyatli ijara uchun 5% komissiya undiriladi. Masalan, 1,000,000 so'mlik ijaradan 50,000 so'm komissiya olinadi." },
+            { cat: 'owner', q: "E'lonim qachon tasdiqlanadi?", a: "Yangi e'lonlar 24 soat ichida admin tomonidan tekshiriladi. Ko'pincha 1-4 soat ichida tasdiqlanadi." },
+            { cat: 'payment', q: 'Qanday to\'lov usullari mavjud?', a: "IjaraGo quyidagi to'lov usullarini qo'llab-quvvatlaydi: Payme, Click, Uzcard, Visa/MasterCard." },
+            { cat: 'payment', q: "To'lov xavfsizmi?", a: "Ha, mutlaqo xavfsiz! IjaraGo SSL shifrlash va PCI DSS standartiga mos to'lov tizimidan foydalanadi." },
+            { cat: 'general', q: "Ijarada muammo bo'lsa kimga murojaat qilaman?", a: "Birinchi navbatda egasi bilan chat orqali muloqot qiling. Agar muammo hal bo'lmasa, IjaraGo qo'llab-quvvatlash jamoasiga murojaat qiling. Biz 24/7 yordam berishga tayyormiz." }
+        ];
+
+        function renderFAQs(faqs) {
+            document.getElementById('faqList').innerHTML = faqs.map((faq, i) => 
+      <div class="faq-item" id="faq-${i}">
+        <div class="faq-question" onclick="toggleFAQ(${i})">
+          <span>${faq.q}</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">${faq.a}</div>
+      </div>
+    ).join('');
+        }
+
+        function toggleFAQ(i) {
+            const item = document.getElementById('faq-' + i);
+            item.classList.toggle('open');
+        }
+
+        function filterFAQ(cat, btn) {
+            document.querySelectorAll('.tab-filter').forEach(b => {
+                b.classList.remove('btn-primary', 'active');
+                b.classList.add('btn-outline');
+            });
+            btn.classList.add('btn-primary', 'active');
+            btn.classList.remove('btn-outline');
+            const filtered = cat === 'all' ? FAQS : FAQS.filter(f => f.cat === cat);
+            renderFAQs(filtered);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderFAQs(FAQS);
+            setTimeout(() => toggleFAQ(0), 300);
+        });
+    </script>
+    <script src="enhancements.js"></script>
+    <script src="support-chat.js"></script>
+</body>
+
+</html>

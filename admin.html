@@ -1,0 +1,905 @@
+﻿<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="IjaraGo admin boshqaruv paneli." />
+    <script>
+        // Auth guard — login qilinmagan bo'lsa qaytariladi
+        (function () {
+            if (!sessionStorage.getItem('adminLoggedIn')) {
+                window.location.replace('admin-login.html');
+            }
+        })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel — IjaraGo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="enhancements.css" />
+    <style>
+        body {
+            background: var(--bg);
+        }
+
+        .admin-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            color: rgba(255, 255, 255, .65);
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-family: var(--font);
+            text-decoration: none;
+        }
+
+        .admin-nav-item:hover,
+        .admin-nav-item.active {
+            background: rgba(99, 102, 241, .25);
+            color: white;
+        }
+
+        .admin-nav-item .nav-icon {
+            font-size: 18px;
+            width: 22px;
+            flex-shrink: 0;
+        }
+
+        .admin-logo {
+            color: white;
+            font-size: 20px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 8px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, .1);
+            margin-bottom: 12px;
+        }
+
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        .table-wrap {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .search-bar-admin {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .search-bar-admin input {
+            flex: 1;
+            padding: 10px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            font-family: var(--font);
+            font-size: 14px;
+            outline: none;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 24px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .complaint-item {
+            padding: 16px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            margin-bottom: 12px;
+        }
+
+        .complaint-item.open-c {
+            border-left: 4px solid var(--danger);
+        }
+
+        .complaint-item.resolved-c {
+            border-left: 4px solid var(--success);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-layout">
+
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="admin-logo">🛡️ Admin Panel</div>
+
+            <button class="admin-nav-item active" onclick="showAdminSection('dashboard',this)"><span
+                    class="nav-icon">📊</span>Dashboard</button>
+            <button class="admin-nav-item" onclick="showAdminSection('users',this)"><span
+                    class="nav-icon">👥</span>Foydalanuvchilar</button>
+            <button class="admin-nav-item" onclick="showAdminSection('listings',this)"><span
+                    class="nav-icon">📋</span>E'lonlar</button>
+            <button class="admin-nav-item" onclick="showAdminSection('orders',this)"><span
+                    class="nav-icon">📅</span>Buyurtmalar</button>
+            <button class="admin-nav-item" onclick="showAdminSection('payments',this)"><span
+                    class="nav-icon">💰</span>To'lovlar</button>
+            <button class="admin-nav-item" onclick="showAdminSection('complaints',this)">
+                <span class="nav-icon">⚠️</span>Shikoyatlar
+                <span
+                    style="margin-left:auto;background:var(--danger);color:white;font-size:10px;padding:2px 7px;border-radius:100px;">5</span>
+            </button>
+            <button class="admin-nav-item" onclick="showAdminSection('statistics',this)"><span
+                    class="nav-icon">📈</span>Statistika</button>
+            <button class="admin-nav-item" onclick="showAdminSection('categories',this)"><span
+                    class="nav-icon">🗂️</span>Kategoriyalar</button>
+
+            <div style="flex:1;"></div>
+            <button onclick="adminLogout()" class="admin-nav-item"
+                style="color:rgba(255,100,100,.8);margin-top:auto;"><span class="nav-icon">🚪</span>Chiqish</button>
+        </aside>
+
+        <!-- Content -->
+        <div class="admin-content">
+            <!-- Topbar -->
+            <div class="admin-topbar">
+                <div style="font-weight:700;">🛡️ IjaraGo Boshqaruv Markazi</div>
+                <div style="display:flex;align-items:center;gap:12px;">
+                    <span style="font-size:12px;color:var(--gray);" id="topbarTime"></span>
+                    <img src="https://i.pravatar.cc/40?img=1"
+                        style="width:36px;height:36px;border-radius:50%;object-fit:cover;" alt="Admin" />
+                    <div>
+                        <div style="font-weight:700;font-size:14px;" id="topbarName">Admin</div>
+                        <div style="font-size:11px;color:var(--gray);" id="topbarRole">Super Admin</div>
+                    </div>
+                    <button onclick="adminLogout()"
+                        style="padding:7px 14px;border-radius:10px;border:1.5px solid var(--border);background:white;font-family:var(--font);font-size:12px;font-weight:600;color:var(--danger);cursor:pointer;">🚪
+                        Chiqish</button>
+                </div>
+            </div>
+
+            <div class="admin-page">
+
+                <!-- DASHBOARD -->
+                <div id="sec-dashboard" class="page-section active">
+                    <h1 style="font-size:28px;font-weight:800;margin-bottom:8px;">Dashboard 📊</h1>
+                    <p style="color:var(--gray);margin-bottom:28px;">Tizimning umumiy holati</p>
+
+                    <div class="admin-stats">
+                        <div class="admin-stat-card">
+                            <div class="admin-stat-icon">👥</div>
+                            <div>
+                                <div class="admin-stat-val">15,240</div>
+                                <div class="admin-stat-label">Jami foydalanuvchilar</div>
+                            </div>
+                        </div>
+                        <div class="admin-stat-card yellow">
+                            <div class="admin-stat-icon">📋</div>
+                            <div>
+                                <div class="admin-stat-val">2,410</div>
+                                <div class="admin-stat-label">Faol e'lonlar</div>
+                            </div>
+                        </div>
+                        <div class="admin-stat-card green">
+                            <div class="admin-stat-icon">💰</div>
+                            <div>
+                                <div class="admin-stat-val">84.2M</div>
+                                <div class="admin-stat-label">Bu oy aylanma</div>
+                            </div>
+                        </div>
+                        <div class="admin-stat-card red">
+                            <div class="admin-stat-icon">⚠️</div>
+                            <div>
+                                <div class="admin-stat-val">5</div>
+                                <div class="admin-stat-label">Ochiq shikoyatlar</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chart -->
+                    <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px;margin-bottom:24px;">
+                        <div class="metric-card">
+                            <h3 style="margin-bottom:20px;font-size:16px;font-weight:700;">📅 Kunlik foydalanuvchilar
+                                (so'nggi 7 kun)</h3>
+                            <div class="chart-bars">
+                                <div class="bar-item">
+                                    <div class="bar" style="height:55%;"></div>
+                                    <div class="bar-label">Du</div>
+                                </div>
+                                <div class="bar-item">
+                                    <div class="bar" style="height:70%;"></div>
+                                    <div class="bar-label">Se</div>
+                                </div>
+                                <div class="bar-item">
+                                    <div class="bar" style="height:45%;background:var(--primary-light);"></div>
+                                    <div class="bar-label">Ch</div>
+                                </div>
+                                <div class="bar-item">
+                                    <div class="bar" style="height:88%;"></div>
+                                    <div class="bar-label">Pa</div>
+                                </div>
+                                <div class="bar-item">
+                                    <div class="bar" style="height:75%;"></div>
+                                    <div class="bar-label">Ju</div>
+                                </div>
+                                <div class="bar-item">
+                                    <div class="bar" style="height:100%;background:var(--secondary);"></div>
+                                    <div class="bar-label">Sh</div>
+                                </div>
+                                <div class="bar-item">
+                                    <div class="bar" style="height:62%;background:var(--primary-light);"></div>
+                                    <div class="bar-label">Ya</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <h3 style="margin-bottom:16px;font-size:16px;font-weight:700;">🏆 Top kategoriyalar</h3>
+                            <div style="display:flex;flex-direction:column;gap:10px;">
+                                <div>
+                                    <div
+                                        style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;">
+                                        <span>🏠 Uylar</span><strong>35%</strong>
+                                    </div>
+                                    <div style="height:6px;background:var(--border);border-radius:4px;">
+                                        <div style="height:100%;width:35%;background:var(--primary);border-radius:4px;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div
+                                        style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;">
+                                        <span>🚗 Mashinalar</span><strong>28%</strong>
+                                    </div>
+                                    <div style="height:6px;background:var(--border);border-radius:4px;">
+                                        <div
+                                            style="height:100%;width:28%;background:var(--secondary);border-radius:4px;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div
+                                        style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;">
+                                        <span>🔌 Texnika</span><strong>20%</strong>
+                                    </div>
+                                    <div style="height:6px;background:var(--border);border-radius:4px;">
+                                        <div style="height:100%;width:20%;background:var(--success);border-radius:4px;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div
+                                        style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;">
+                                        <span>🪑 Mebel</span><strong>10%</strong>
+                                    </div>
+                                    <div style="height:6px;background:var(--border);border-radius:4px;">
+                                        <div style="height:100%;width:10%;background:var(--danger);border-radius:4px;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pending listings -->
+                    <div class="table-wrap">
+                        <div
+                            style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+                            <h3 style="font-size:16px;font-weight:700;">⏳ Tasdiq kutayotgan e'lonlar</h3>
+                            <button class="btn btn-primary" style="font-size:13px;"
+                                onclick="showAdminSection('listings',null)">Barchasini ko'rish</button>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>E'lon</th>
+                                    <th>Kategoriya</th>
+                                    <th>Ega</th>
+                                    <th>Narx</th>
+                                    <th>Holat</th>
+                                    <th>Harakatlar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pendingTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- FOYDALANUVCHILAR -->
+                <div id="sec-users" class="page-section">
+                    <h1 style="font-size:28px;font-weight:800;margin-bottom:24px;">👥 Foydalanuvchilar</h1>
+                    <div class="search-bar-admin">
+                        <input type="text" id="userSearch" placeholder="🔍 Ism, email yoki telefon bo'yicha qidirish..."
+                            oninput="filterUsers()" />
+                        <select class="sort-select" id="userRoleFilter" onchange="filterUsers()">
+                            <option value="">Barchasi</option>
+                            <option value="user">Ijarachilar</option>
+                            <option value="owner">Egalar</option>
+                            <option value="admin">Adminlar</option>
+                        </select>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Foydalanuvchi</th>
+                                    <th>Rol</th>
+                                    <th>Telefon</th>
+                                    <th>Ro'yxat sanasi</th>
+                                    <th>Holat</th>
+                                    <th>Harakatlar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- E'LONLAR -->
+                <div id="sec-listings" class="page-section">
+                    <h1 style="font-size:28px;font-weight:800;margin-bottom:24px;">📋 Barcha E'lonlar</h1>
+                    <div class="search-bar-admin">
+                        <input type="text" placeholder="🔍 E'lon qidirish..."
+                            oninput="filterAdminListings(this.value)" />
+                        <select class="sort-select"
+                            onchange="filterAdminListings(document.querySelector('#sec-listings input').value, this.value)">
+                            <option value="">Barcha holat</option>
+                            <option value="active">Faol</option>
+                            <option value="pending">Kutilmoqda</option>
+                            <option value="blocked">Bloklangan</option>
+                        </select>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>E'lon</th>
+                                    <th>Kategoriya</th>
+                                    <th>Narx</th>
+                                    <th>Reyting</th>
+                                    <th>Holat</th>
+                                    <th>Harakatlar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminListingsBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- BUYURTMALAR -->
+                <div id="sec-orders" class="page-section">
+                    <h1 style="font-size:28px;font-weight:800;margin-bottom:24px;">📅 Barcha Buyurtmalar</h1>
+                    <div class="table-wrap">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Mijoz</th>
+                                    <th>E'lon</th>
+                                    <th>Sanalar</th>
+                                    <th>Summa</th>
+                                    <th>Holat</th>
+                                    <th>Harakatlar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ordersBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TO'LOVLAR -->
+                <div id="sec-payments" class="page-section">
+                    <h1 style="font-size:28px;font-weight:800;margin-bottom:24px;">💰 To'lovlar</h1>
+                    <div class="admin-stats" style="margin-bottom:28px;">
+                        <div class="admin-stat-card green">
+                            <div class="admin-stat-icon">💵</div>
+                            <div>
+                                <div class="admin-stat-val">4.2M</div>
+                                <div class="admin-stat-label">Bu oy komissiya</div>
+                            </div>
+                        </div>
+                        <div class="admin-stat-card">
+                            <div class="admin-stat-icon">📊</div>
+                            <div>
+                                <div class="admin-stat-val">5%</div>
+                                <div class="admin-stat-label">Komissiya foizi</div>
+                            </div>
+                        </div>
+                        <div class="admin-stat-card yellow">
+                            <div class="admin-stat-icon">⏳</div>
+                            <div>
+                                <div class="admin-stat-val">1.8M</div>
+                                <div class="admin-stat-label">Kutilmoqda</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display:flex;gap:12px;margin-bottom:20px;">
+                        <label style="font-size:14px;font-weight:600;">Komissiya foizi:</label>
+                        <input type="number" id="commissionRate" value="5" min="0" max="30"
+                            style="width:80px;padding:8px 12px;border:1.5px solid var(--border);border-radius:10px;font-family:var(--font);font-size:14px;" />
+                        <button class="btn btn-primary" style="font-size:13px;"
+                            onclick="showToast('Komissiya foizi yangilandi: '+document.getElementById('commissionRate').value+'% ✅','success')">Yangilash</button>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Ega</th>
+                                    <th>E'lon</th>
+                                    <th>Summa</th>
+                                    <th>Komissiya
+                    </div>
+                    </th>
+                    <th>Sana</th>
+                    <th>Holat</th>
+                    </tr>
+                    </thead>
+                    <tbody id="paymentsBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- SHIKOYATLAR -->
+            <div id="sec-complaints" class="page-section">
+                <h1 style="font-size:28px;font-weight:800;margin-bottom:24px;">⚠️ Shikoyatlar</h1>
+                <div id="complaintsList"></div>
+            </div>
+
+            <!-- STATISTIKA -->
+            <div id="sec-statistics" class="page-section">
+                <h1 style="font-size:28px;font-weight:800;margin-bottom:24px;">📈 Statistika</h1>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+                    <div class="metric-card">
+                        <h3 style="font-size:16px;font-weight:700;margin-bottom:20px;">Oylik daromad (so'm)</h3>
+                        <div class="chart-bars">
+                            <div class="bar-item">
+                                <div class="bar" style="height:50%;"></div>
+                                <div class="bar-label">Okt</div>
+                            </div>
+                            <div class="bar-item">
+                                <div class="bar" style="height:60%;"></div>
+                                <div class="bar-label">Noy</div>
+                            </div>
+                            <div class="bar-item">
+                                <div class="bar" style="height:45%;background:var(--primary-light);"></div>
+                                <div class="bar-label">Dek</div>
+                            </div>
+                            <div class="bar-item">
+                                <div class="bar" style="height:55%;background:var(--primary-light);"></div>
+                                <div class="bar-label">Yan</div>
+                            </div>
+                            <div class="bar-item">
+                                <div class="bar" style="height:75%;"></div>
+                                <div class="bar-label">Fev</div>
+                            </div>
+                            <div class="bar-item">
+                                <div class="bar" style="height:100%;background:var(--secondary);"></div>
+                                <div class="bar-label">Mar</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <h3 style="font-size:16px;font-weight:700;margin-bottom:20px;">Yangi foydalanuvchilar</h3>
+                        <div class="chart-bars">
+                            <div class="bar-item">
+                                <div class="bar" style="height:40%;background:var(--success);"></div>
+                                <div class="bar-label">Okt</div>
+                            </div>
+                            <div class="bar-item">
+                                <div class="bar" style="height:55%;background:var(--success);"></div>
+                                <div class="bar-label">Noy</div>
+                            </div>
+                            <div class="bar-item">
+                                <div class="bar" style="height:70%;background:var(--success);"></div>
+                                <div class="bar-label">Dek</div>
+                            </div>
+                            <div class="bar-item">
+                                <div class="bar" style="height:65%;background:var(--success);"></div>
+                                <div class="bar-label">Yan</div>
+                            </div>
+                            <div class="bar-item">
+                                <div class="bar" style="height:80%;background:var(--success);"></div>
+                                <div class="bar-label">Fev</div>
+                            </div>
+                            <div class="bar-item">
+                                <div class="bar" style="height:100%;background:#059669;"></div>
+                                <div class="bar-label">Mar</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="metric-card" style="margin-top:24px;">
+                    <h3 style="font-size:16px;font-weight:700;margin-bottom:16px;">🏆 Eng mashhur e'lonlar</h3>
+                    <table class="data-table" style="box-shadow:none;border:none;">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>E'lon</th>
+                                <th>Ko'rishlar</th>
+                                <th>Bronlar</th>
+                                <th>Reyting</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>To'y uchun tent va jihozlar</td>
+                                <td>1,240</td>
+                                <td>52</td>
+                                <td>⭐ 4.7</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Toyota Camry 2022</td>
+                                <td>980</td>
+                                <td>58</td>
+                                <td>⭐ 4.9</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Buxoro tarixiy uy</td>
+                                <td>870</td>
+                                <td>88</td>
+                                <td>⭐ 4.9</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Zamonaviy kvartira</td>
+                                <td>740</td>
+                                <td>34</td>
+                                <td>⭐ 4.8</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- KATEGORIYALAR -->
+            <div id="sec-categories" class="page-section">
+                <h1 style="font-size:28px;font-weight:800;margin-bottom:24px;">🗂️ Kategoriyalarni Boshqarish</h1>
+                <div class="section-card"
+                    style="background:white;border-radius:var(--radius);padding:28px;border:1px solid var(--border);">
+                    <div style="display:flex;gap:12px;margin-bottom:24px;">
+                        <input type="text" id="newCatInput" placeholder="Yangi kategoriya nomi"
+                            style="flex:1;padding:10px 16px;border:1.5px solid var(--border);border-radius:12px;font-family:var(--font);font-size:14px;outline:none;" />
+                        <button class="btn btn-primary" onclick="addCategory()">+ Qo'shish</button>
+                    </div>
+                    <div id="catsList" style="display:flex;flex-direction:column;gap:10px;"></div>
+                </div>
+            </div>
+
+        </div><!-- end admin-page -->
+    </div><!-- end admin-content -->
+    </div><!-- end admin-layout -->
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="data.js"></script>
+    <script src="main.js"></script>
+    <script src="auth.js"></script>
+    <script src="listings-store.js"></script>
+    <script>
+        // ---- SECTION SWITCH ----
+        function showAdminSection(name, btn) {
+            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.admin-nav-item').forEach(b => b.classList.remove('active'));
+            document.getElementById('sec-' + name).classList.add('active');
+            if (btn) btn.classList.add('active');
+
+            if (name === 'dashboard') renderPendingTable();
+            if (name === 'users') renderUsersTable();
+            if (name === 'listings') renderAdminListings();
+            if (name === 'orders') renderOrders();
+            if (name === 'payments') renderPayments();
+            if (name === 'complaints') renderComplaints();
+            if (name === 'categories') renderCategories();
+        }
+
+        // ---- PENDING TABLE (STORE — real data) ----
+        function renderPendingTable() {
+            const pending = STORE.getPending();
+            const tbody = document.getElementById('pendingTableBody');
+            updateAdminPendingBadge();
+            if (pending.length === 0) {
+                tbody.innerHTML = <tr><td colspan="6" style="text-align:center;padding:32px;color:var(--gray);">
+                    <div style="font-size:40px;margin-bottom:12px;">📭</div>
+                    <div style="font-size:15px;font-weight:600;">Hech qanday kutilayotgan e'lon yo'q</div>
+                </td></tr>`;
+                return;
+            }
+            tbody.innerHTML = pending.map(item => 
+      <tr style="animation:table-row-in .3s ease both;">
+        <td>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <img src="\" style="width:48px;height:40px;border-radius:8px;object-fit:cover;" onerror="this.src='https://via.placeholder.com/48x40'" />
+            <div>
+              <strong style="font-size:13px;">\</strong>
+              <div style="font-size:11px;color:var(--gray);">📍 \</div>
+            </div>
+          </div>
+        </td>
+        <td>\</td>
+        <td>
+          <div style="font-size:13px;font-weight:600;">\</div>
+          <div style="font-size:11px;color:var(--gray);">\</div>
+        </td>
+        <td><strong style="color:var(--primary);">\</strong> <span style="font-size:11px;color:var(--gray);">/\</span></td>
+        <td><span class="status-badge pending">⏳ Kutilmoqda</span></td>
+        <td>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button class="btn btn-primary" style="font-size:11px;padding:6px 12px;" onclick="approveListing('\')">✔ Tasdiqlash</button>
+            <button class="btn btn-outline" style="font-size:11px;padding:6px 12px;border-color:var(--danger);color:var(--danger);" onclick="rejectListing('\')">✕ Rad etish</button>
+          </div>
+        </td>
+      </tr>
+    ).join('');
+        }
+
+        function approveListing(id) {
+            STORE.approve(id);
+            showToast("E'lon tasdiqlandi ✅", 'success');
+            renderPendingTable();
+            if (document.getElementById('sec-listings')?.classList.contains('active')) renderAdminListings();
+        }
+
+        function rejectListing(id) {
+            const reason = prompt('Rad etish sababi (ixtiyoriy):') || 'Talabga javob bermaydi';
+            STORE.reject(id, reason);
+            showToast("E'lon rad etildi", 'info');
+            renderPendingTable();
+        }
+
+        function updateAdminPendingBadge() {
+            const count = STORE.getPending().length;
+            const badge = document.getElementById('pendingBadge');
+            if (badge) {
+                badge.textContent = count;
+                badge.style.display = count > 0 ? 'inline-flex' : 'none';
+            }
+        }
+        // ---- USERS ----
+        const USERS = [
+            { id: 1, name: 'Alisher Nazarov', role: 'Ijarachi', phone: '+998901234567', date: '12 Jan 2026', status: 'active' },
+            { id: 2, name: 'Aziz Karimov', role: 'Ega', phone: '+998901111222', date: '5 Yan 2026', status: 'active' },
+            { id: 3, name: 'Bobur Yusupov', role: 'Ega', phone: '+998902222333', date: '20 Dek 2025', status: 'active' },
+            { id: 4, name: 'Malika Rahimova', role: 'Ijarachi', phone: '+998903333444', date: '1 Fev 2026', status: 'blocked' },
+            { id: 5, name: 'Dilnoza Hasanova', role: 'Ijarachi', phone: '+998904444555', date: '14 Fev 2026', status: 'active' },
+            { id: 6, name: 'Nodira Saidova', role: 'Ega', phone: '+998905555666', date: '8 Mar 2026', status: 'pending' },
+        ];
+
+        function renderUsersTable(filter = '', roleFilter = '') {
+            let users = USERS.filter(u =>
+                (!filter || u.name.toLowerCase().includes(filter.toLowerCase())) &&
+                (!roleFilter || u.role.toLowerCase().includes(roleFilter))
+            );
+            document.getElementById('usersTableBody').innerHTML = users.map(u => 
+      <tr>
+        <td>${u.id}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <img src="https://i.pravatar.cc/40?img=${u.id * 7}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;" alt=""/>
+            <span style="font-weight:600;">${u.name}</span>
+          </div>
+        </td>
+        <td>${u.role}</td>
+        <td>${u.phone}</td>
+        <td>${u.date}</td>
+        <td><span class="status-badge ${u.status}">${u.status === 'active' ? '✔ Faol' : u.status === 'blocked' ? '🚫 Bloklangan' : '⏳ Kutilmoqda'}</span></td>
+        <td>
+          <div style="display:flex;gap:6px;">
+            ${u.status === 'active'
+                    ? <button class="btn btn-outline" style="font-size:11px;padding:5px 10px;border-color:var(--danger);color:var(--danger);" onclick="showToast('${u.name} bloklandi','info')">🚫 Bloklash</button>`
+                    : <button class="btn btn-primary" style="font-size:11px;padding:5px 10px;" onclick="showToast('${u.name} blokdan chiqarildi ✅','success')">✔ Ochish</button>`
+                }
+          </div>
+        </td>
+      </tr>
+    ).join('');
+        }
+
+        function filterUsers() {
+            const q = document.getElementById('userSearch').value;
+            const role = document.getElementById('userRoleFilter').value;
+            renderUsersTable(q, role);
+        }
+
+        // ---- ADMIN LISTINGS (static + user approved) ----
+        function renderAdminListings(q = '', status = '') {
+            const userApproved = STORE.getApproved().map(ul => ({
+                id: ul.id, title: ul.title, categoryLabel: ul.categoryLabel || ul.category,
+                price: ul.price, priceType: ul.priceType || 'kun',
+                rating: ul.rating || 4.5, image: ul.image,
+                owner: ul.owner, status: 'approved', isUserListing: true
+            }));
+            let items = [...userApproved, ...LISTINGS].filter(it =>
+                (!q || it.title.toLowerCase().includes(q.toLowerCase()))
+            );
+            document.getElementById('adminListingsBody').innerHTML = items.map(item => 
+      <tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <img src="${item.image}" style="width:48px;height:40px;border-radius:8px;object-fit:cover;" alt="" onerror="this.src='https://via.placeholder.com/48x40'"/>
+            <span style="font-weight:600;font-size:13px;">${item.title}</span>
+          </div>
+        </td>
+        <td>${item.categoryLabel}</td>
+        <td>${formatPrice(item.price)}</td>
+        <td>⭐ ${item.rating}</td>
+        <td><span class="status-badge active">✔ Faol</span></td>
+        <td>
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-outline" style="font-size:11px;padding:5px 10px;border-color:var(--danger);color:var(--danger);" onclick="showToast('E\\'lon o\\'chirildi','info')">🗑️</button>
+            <button class="btn btn-outline" style="font-size:11px;padding:5px 10px;border-color:var(--secondary);color:var(--secondary);" onclick="showToast('E\\'lon bloklandi','info')">🚫</button>
+          </div>
+        </td>
+      </tr>
+    ).join('');
+        }
+
+        function filterAdminListings(q, status) { renderAdminListings(q, status); }
+
+        // ---- ORDERS ----
+        function renderOrders() {
+            const orders = [
+                { id: '#001', client: 'Alisher N.', listing: 'Zamonaviy kvartira', dates: '1-5 Mar', sum: '1,250,000', status: 'active' },
+                { id: '#002', client: 'Bobur Y.', listing: 'Toyota Camry', dates: '8 Mar', sum: '350,000', status: 'pending' },
+                { id: '#003', client: 'Dilnoza H.', listing: 'Sony A7III', dates: '20 Fev', sum: '150,000', status: 'active' },
+                { id: '#004', client: 'Nodira S.', listing: 'Buxoro uy', dates: '14-16 Fev', sum: '440,000', status: 'pending' },
+            ];
+            document.getElementById('ordersBody').innerHTML = orders.map(o => 
+      <tr>
+        <td style="font-weight:700;color:var(--primary);">${o.id}</td>
+        <td>${o.client}</td>
+        <td>${o.listing}</td>
+        <td>${o.dates}</td>
+        <td style="font-weight:700;">${o.sum} so'm</td>
+        <td><span class="status-badge ${o.status}">${o.status === 'active' ? '✔ Faol' : '⏳ Kutilmoqda'}</span></td>
+        <td>
+          <button class="btn btn-outline" style="font-size:11px;padding:5px 10px;border-color:var(--danger);color:var(--danger);" onclick="showToast('Buyurtma bekor qilindi','info')">✕ Bekor</button>
+        </td>
+      </tr>
+    ).join('');
+        }
+
+        // ---- PAYMENTS ----
+        function renderPayments() {
+            const pays = [
+                { id: '#P01', owner: 'Aziz Karimov', listing: 'Zamonaviy kvartira', sum: '1,250,000', comm: '62,500', date: '1 Mar 2026', status: 'active' },
+                { id: '#P02', owner: 'Bobur Yusupov', listing: 'Toyota Camry', sum: '350,000', comm: '17,500', date: '28 Fev 2026', status: 'active' },
+                { id: '#P03', owner: 'Malika Rahimova', listing: 'Samarqand uy', sum: '360,000', comm: '18,000', date: '14 Fev 2026', status: 'pending' },
+            ];
+            document.getElementById('paymentsBody').innerHTML = pays.map(p => 
+      <tr>
+        <td style="font-weight:700;color:var(--primary);">${p.id}</td>
+        <td>${p.owner}</td>
+        <td>${p.listing}</td>
+        <td style="font-weight:700;">${p.sum} so'm</td>
+        <td style="color:var(--success);font-weight:700;">+${p.comm}</td>
+        <td>${p.date}</td>
+        <td><span class="status-badge ${p.status}">${p.status === 'active' ? '✔ To\'langan' : '⏳ Kutilmoqda'}</span></td>
+      </tr>
+    ).join('');
+        }
+
+        // ---- COMPLAINTS ----
+        function renderComplaints() {
+            const complaints = [
+                { user: 'Alisher N.', about: "Soxta e'lon — rasm boshqacha edi", date: '1 Mar', status: 'open' },
+                { user: 'Malika R.', about: 'Ega o\'z vaqtida javob bermadi', date: '28 Fev', status: 'open' },
+                { user: 'Dilnoza H.', about: 'Mashina holati tavsifga mos kelmadi', date: '25 Fev', status: 'resolved' },
+            ];
+            document.getElementById('complaintsList').innerHTML = complaints.map(c => 
+      <div class="complaint-item ${c.status === 'open' ? 'open-c' : 'resolved-c'}">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;">
+          <div>
+            <strong style="font-size:15px;">${c.user}</strong>
+            <div style="font-size:13px;color:var(--dark-3);margin:4px 0;">${c.about}</div>
+            <div style="font-size:11px;color:var(--gray);">📅 ${c.date}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="status-badge ${c.status === 'open' ? 'blocked' : 'active'}">${c.status === 'open' ? '⚠️ Ochiq' : '✔ Hal qilindi'}</span>
+            ${c.status === 'open' ? 
+              <button class="btn btn-primary" style="font-size:12px;padding:7px 14px;" onclick="showToast('Shikoyat hal qilindi ✅','success')">✔ Hal qilish</button>
+              <button class="btn btn-outline" style="font-size:12px;padding:7px 14px;" onclick="showToast('Foydalanuvchi bloklandi','info')">🚫 Bloklash</button>
+            : ''}
+          </div>
+        </div>
+      </div>
+    ).join('');
+        }
+
+        // ---- CATEGORIES ----
+        let categories = ['🏠 Uylar', '🚗 Mashinalar', '🔌 Texnika', '🪑 Mebel', '🎉 Tadbir jihozlari', '⚽ Sport', '📸 Foto/Video'];
+
+        function renderCategories() {
+            document.getElementById('catsList').innerHTML = categories.map((c, i) => 
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--bg);border-radius:12px;">
+        <span style="font-size:15px;font-weight:600;">${c}</span>
+        <button class="btn btn-outline" style="font-size:12px;padding:5px 12px;border-color:var(--danger);color:var(--danger);" onclick="removeCategory(${i})">✕ O'chirish</button>
+      </div>
+    ).join('');
+        }
+
+        function addCategory() {
+            const val = document.getElementById('newCatInput').value.trim();
+            if (!val) return showToast("Kategoriya nomini kiriting", 'info');
+            categories.push(val);
+            document.getElementById('newCatInput').value = '';
+            renderCategories();
+            showToast('Kategoriya qo\'shildi ✅', 'success');
+        }
+
+        function removeCategory(i) {
+            categories.splice(i, 1);
+            renderCategories();
+            showToast('Kategoriya o\'chirildi', 'info');
+        }
+
+        // ---- TOPBAR INIT ----
+        function initTopbar() {
+            const name = sessionStorage.getItem('adminName') || 'admin';
+            const role = sessionStorage.getItem('adminRole') || 'Super Admin';
+            const el = document.getElementById('topbarName');
+            const rl = document.getElementById('topbarRole');
+            const tm = document.getElementById('topbarTime');
+            if (el) el.textContent = name.charAt(0).toUpperCase() + name.slice(1);
+            if (rl) rl.textContent = role;
+            if (tm) {
+                function tick() {
+                    const now = new Date();
+                    tm.textContent = now.toLocaleDateString('uz-UZ') + ' | ' +
+                        now.toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit' });
+                }
+                tick();
+                setInterval(tick, 30000);
+            }
+        }
+
+        // ---- LOGOUT ----
+        function adminLogout() {
+            if (!confirm('Chiqishni xohlaysizmi?')) return;
+            sessionStorage.removeItem('adminLoggedIn');
+            sessionStorage.removeItem('adminRole');
+            sessionStorage.removeItem('adminName');
+            window.location.href = 'admin-login.html';
+        }
+
+        // ---- INIT ----
+        document.addEventListener('DOMContentLoaded', () => {
+            initTopbar();
+            renderPendingTable();
+            updateAdminPendingBadge();
+        });
+
+        function showToast(msg, type = 'info') {
+            const c = document.getElementById('toastContainer');
+            const t = document.createElement('div');
+            t.className = toast ${type}`;
+            t.textContent = msg;
+            c.appendChild(t);
+            requestAnimationFrame(() => t.classList.add('show'));
+            setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 400); }, 3000);
+        }
+    </script>
+</body>
+
+</html>

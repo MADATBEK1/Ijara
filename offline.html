@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Siz hozir offline rejimdasiz. Internet aloqasi tiklanganidan so'ng IjaraGo'dan foydalanishingiz mumkin." />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Offline — IjaraGo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e1b4b);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 24px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, .05);
+            border: 1px solid rgba(255, 255, 255, .1);
+            border-radius: 24px;
+            padding: 56px 48px;
+            max-width: 480px;
+            backdrop-filter: blur(20px);
+        }
+
+        .icon {
+            font-size: 80px;
+            margin-bottom: 24px;
+            display: block;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        p {
+            color: rgba(255, 255, 255, .6);
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 15px;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(99, 102, 241, .4);
+            text-decoration: none;
+            transition: .2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(99, 102, 241, .5);
+        }
+
+        .cached-pages {
+            margin-top: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .cached-link {
+            color: rgba(255, 255, 255, .5);
+            font-size: 13px;
+            text-decoration: none;
+            padding: 8px;
+            border-radius: 8px;
+            transition: .2s;
+        }
+
+        .cached-link:hover {
+            color: white;
+            background: rgba(255, 255, 255, .08);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <span class="icon">📡</span>
+        <h1>Internet mavjud emas</h1>
+        <p>Hozir internet aloqasi yo'q, lekin keshga saqlangan sahifalarni ko'rishingiz mumkin. Aloqa tiklangandan so'ng
+            avtomatik yangilanadi.</p>
+        <a href="/" class="btn" onclick="location.reload()">🔄 Qayta urinish</a>
+        <div class="cached-pages">
+            <span style="font-size:12px;color:rgba(255,255,255,.3);margin-bottom:4px;">Offline ko'rish mumkin:</span>
+            <a href="/index.html" class="cached-link">🏠 Bosh sahifa</a>
+            <a href="/listings.html" class="cached-link">📋 E'lonlar</a>
+            <a href="/categories.html" class="cached-link">🗂️ Kategoriyalar</a>
+            <a href="/faq.html" class="cached-link">❓ FAQ</a>
+        </div>
+    </div>
+</body>
+
+</html>

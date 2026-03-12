@@ -1,0 +1,711 @@
+﻿<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="IjaraGo admin tizimiga kirish." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Kirish — IjaraGo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --danger: #f43f5e;
+            --success: #10b981;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --border: #e2e8f0;
+            --bg: #f8fafc;
+            --font: 'Inter', sans-serif;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animated background */
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(99, 102, 241, .06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, .06) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+        }
+
+        .bg-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(99, 102, 241, .3) 0%, transparent 70%);
+            top: -200px;
+            left: -200px;
+            pointer-events: none;
+            animation: glow-move 8s ease-in-out infinite;
+        }
+
+        .bg-glow-2 {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(244, 63, 94, .2) 0%, transparent 70%);
+            bottom: -100px;
+            right: -100px;
+            pointer-events: none;
+            animation: glow-move 10s ease-in-out infinite reverse;
+        }
+
+        @keyframes glow-move {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(30px, 30px) scale(1.1);
+            }
+        }
+
+        /* Card */
+        .admin-login-card {
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, .04);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, .1);
+            border-radius: 28px;
+            padding: 48px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, .5), inset 0 1px 0 rgba(255, 255, 255, .1);
+            animation: card-in .5s cubic-bezier(.4, 0, .2, 1) both;
+        }
+
+        @keyframes card-in {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(.97);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Shield icon */
+        .admin-icon {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 24px;
+            box-shadow: 0 12px 40px rgba(99, 102, 241, .5);
+            animation: icon-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes icon-pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 12px 40px rgba(99, 102, 241, .5);
+            }
+
+            50% {
+                box-shadow: 0 12px 60px rgba(99, 102, 241, .8);
+            }
+        }
+
+        .admin-login-card h1 {
+            color: white;
+            font-size: 26px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 6px;
+        }
+
+        .admin-login-card p {
+            color: rgba(255, 255, 255, .5);
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 36px;
+        }
+
+        /* Form */
+        .field-group {
+            margin-bottom: 18px;
+        }
+
+        .field-group label {
+            display: block;
+            color: rgba(255, 255, 255, .7);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .6px;
+            margin-bottom: 8px;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-wrap .field-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            pointer-events: none;
+        }
+
+        .input-wrap input {
+            width: 100%;
+            padding: 13px 16px 13px 42px;
+            background: rgba(255, 255, 255, .06);
+            border: 1.5px solid rgba(255, 255, 255, .1);
+            border-radius: 12px;
+            font-family: var(--font);
+            font-size: 15px;
+            color: white;
+            outline: none;
+            transition: all .2s ease;
+            caret-color: #6366f1;
+        }
+
+        .input-wrap input::placeholder {
+            color: rgba(255, 255, 255, .3);
+        }
+
+        .input-wrap input:focus {
+            border-color: #6366f1;
+            background: rgba(99, 102, 241, .1);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, .15);
+        }
+
+        .input-wrap input.error {
+            border-color: var(--danger);
+            background: rgba(244, 63, 94, .08);
+        }
+
+        /* Password toggle */
+        .eye-btn {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 17px;
+            padding: 4px;
+            line-height: 1;
+        }
+
+        /* Error message */
+        .error-msg {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            background: rgba(244, 63, 94, .12);
+            border: 1px solid rgba(244, 63, 94, .3);
+            color: #fca5a5;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 18px;
+        }
+
+        .error-msg.show {
+            display: flex;
+        }
+
+        /* Attempts counter */
+        .attempts-info {
+            display: none;
+            font-size: 12px;
+            color: rgba(255, 165, 0, .8);
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .attempts-info.show {
+            display: block;
+        }
+
+        /* Submit button */
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-family: var(--font);
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all .25s ease;
+            box-shadow: 0 8px 30px rgba(99, 102, 241, .4);
+            margin-top: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(99, 102, 241, .6);
+        }
+
+        .login-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .login-btn:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .login-btn .btn-loader {
+            display: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, .3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin .7s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .login-btn.loading .btn-text {
+            display: none;
+        }
+
+        .login-btn.loading .btn-loader {
+            display: block;
+        }
+
+        /* Hint */
+        .hint-box {
+            margin-top: 24px;
+            padding: 14px 16px;
+            background: rgba(99, 102, 241, .08);
+            border: 1px solid rgba(99, 102, 241, .2);
+            border-radius: 12px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, .5);
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .hint-box strong {
+            color: rgba(255, 255, 255, .75);
+        }
+
+        /* Back link */
+        .back-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 20px;
+            color: rgba(255, 255, 255, .4);
+            font-size: 13px;
+            text-decoration: none;
+            transition: color .2s;
+        }
+
+        .back-link:hover {
+            color: rgba(255, 255, 255, .7);
+        }
+
+        /* Success overlay */
+        .success-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--dark);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .4s ease;
+        }
+
+        .success-overlay.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .success-icon {
+            font-size: 72px;
+            margin-bottom: 20px;
+            animation: bounce-in .5s cubic-bezier(.36, .07, .19, .97) both;
+        }
+
+        @keyframes bounce-in {
+            0% {
+                transform: scale(.3);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            70% {
+                transform: scale(.95);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .success-overlay h2 {
+            color: white;
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .success-overlay p {
+            color: rgba(255, 255, 255, .6);
+            font-size: 15px;
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 3px;
+            background: rgba(255, 255, 255, .1);
+            border-radius: 2px;
+            margin-top: 24px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #6366f1;
+            width: 0%;
+            border-radius: 2px;
+            transition: width 1.5s ease;
+        }
+
+        /* Blocked overlay */
+        .blocked-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .8);
+            backdrop-filter: blur(10px);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .blocked-overlay.show {
+            display: flex;
+        }
+
+        .blocked-box {
+            background: #1e1b4b;
+            border: 1px solid rgba(244, 63, 94, .3);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            max-width: 360px;
+        }
+
+        .blocked-box h3 {
+            color: #fca5a5;
+            font-size: 22px;
+            font-weight: 800;
+            margin: 16px 0 8px;
+        }
+
+        .blocked-box p {
+            color: rgba(255, 255, 255, .6);
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .timer-display {
+            font-size: 36px;
+            font-weight: 800;
+            color: #f43f5e;
+            margin: 8px 0;
+        }
+
+        @media (max-width:480px) {
+            .admin-login-card {
+                padding: 32px 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="bg-glow-2"></div>
+
+    <!-- Login Card -->
+    <div class="admin-login-card">
+        <div class="admin-icon">🛡️</div>
+        <h1>Admin Kirish</h1>
+        <p>IjaraGo Boshqaruv Markaziga xush kelibsiz</p>
+
+        <!-- Error message -->
+        <div class="error-msg" id="errorMsg">
+            <span>🚫</span>
+            <span id="errorText">Login yoki parol noto'g'ri!</span>
+        </div>
+
+        <!-- Attempts -->
+        <div class="attempts-info" id="attemptsInfo"></div>
+
+        <form id="adminLoginForm" onsubmit="attemptLogin(event)">
+            <div class="field-group">
+                <label>👤 Login</label>
+                <div class="input-wrap">
+                    <span class="field-icon">👤</span>
+                    <input type="text" id="adminUsername" placeholder="admin" autocomplete="username"
+                        spellcheck="false" />
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label>🔒 Parol</label>
+                <div class="input-wrap">
+                    <span class="field-icon">🔒</span>
+                    <input type="password" id="adminPassword" placeholder="••••••••" autocomplete="current-password" />
+                    <button type="button" class="eye-btn" id="eyeBtn" onclick="toggleEye()">👁️</button>
+                </div>
+            </div>
+
+            <button type="submit" class="login-btn" id="loginBtn">
+                <div class="btn-loader"></div>
+                <span class="btn-text">🔐 Kirish</span>
+            </button>
+        </form>
+
+        <div class="hint-box">
+            <strong>Demo kirish ma'lumotlari:</strong><br />
+            Login: <strong style="color:#a5b4fc;">admin</strong> &nbsp;|&nbsp; Parol: <strong
+                style="color:#a5b4fc;">admin123</strong>
+        </div>
+
+        <a href="login.html" class="back-link">← Asosiy saytga qaytish</a>
+    </div>
+
+    <!-- Success overlay -->
+    <div class="success-overlay" id="successOverlay">
+        <div class="success-icon">✅</div>
+        <h2>Muvaffaqiyatli kirdingiz!</h2>
+        <p>Admin panelga yo'naltirilmoqda...</p>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <!-- Blocked overlay -->
+    <div class="blocked-overlay" id="blockedOverlay">
+        <div class="blocked-box">
+            <div style="font-size:52px;">🚫</div>
+            <h3>Kirish bloklandi!</h3>
+            <p>Juda ko'p noto'g'ri urinish. Qayta urinish uchun kuting:</p>
+            <div class="timer-display" id="timerDisplay">30</div>
+            <p style="font-size:12px;color:rgba(255,255,255,.4);">soniyadan so'ng qayta urinishingiz mumkin</p>
+        </div>
+    </div>
+
+    <script>
+        // ===== ADMIN CREDENTIALS =====
+        const ADMIN_CREDENTIALS = [
+            { username: 'admin', password: 'admin123', role: 'Super Admin' },
+            { username: 'moderator', password: 'moder456', role: 'Moderator' },
+            { username: 'IjaraGo', password: 'hub2026', role: 'Manager' },
+        ];
+
+        const MAX_ATTEMPTS = 5;
+        const BLOCK_SECONDS = 30;
+        let attempts = 0;
+        let blocked = false;
+
+        // ===== TOGGLE PASSWORD =====
+        function toggleEye() {
+            const inp = document.getElementById('adminPassword');
+            const btn = document.getElementById('eyeBtn');
+            inp.type = inp.type === 'password' ? 'text' : 'password';
+            btn.textContent = inp.type === 'password' ? '👁️' : '🙈';
+        }
+
+        // ===== SHAKE ANIMATION =====
+        function shakeCard() {
+            const card = document.querySelector('.admin-login-card');
+            card.style.animation = 'none';
+            card.style.transform = 'translateX(-8px)';
+            let i = 0;
+            const intervalId = setInterval(() => {
+                i++;
+                card.style.transform = `translateX(${i % 2 === 0 ? -8 : 8}px)`;
+                if (i >= 6) {
+                    clearInterval(intervalId);
+                    card.style.transform = '';
+                }
+            }, 60);
+        }
+
+        // ===== SHOW ERROR =====
+        function showError(text) {
+            const msg = document.getElementById('errorMsg');
+            const txt = document.getElementById('errorText');
+            txt.textContent = text;
+            msg.classList.add('show');
+            shakeCard();
+
+            // Shake inputs red
+            document.getElementById('adminUsername').classList.add('error');
+            document.getElementById('adminPassword').classList.add('error');
+            setTimeout(() => {
+                document.getElementById('adminUsername').classList.remove('error');
+                document.getElementById('adminPassword').classList.remove('error');
+            }, 2000);
+        }
+
+        // ===== BLOCK USER =====
+        function blockUser() {
+            blocked = true;
+            let remaining = BLOCK_SECONDS;
+            document.getElementById('blockedOverlay').classList.add('show');
+            const timer = document.getElementById('timerDisplay');
+            const interval = setInterval(() => {
+                remaining--;
+                timer.textContent = remaining;
+                if (remaining <= 0) {
+                    clearInterval(interval);
+                    blocked = false;
+                    attempts = 0;
+                    document.getElementById('blockedOverlay').classList.remove('show');
+                    document.getElementById('attemptsInfo').classList.remove('show');
+                    document.getElementById('errorMsg').classList.remove('show');
+                }
+            }, 1000);
+        }
+
+        // ===== LOGIN ATTEMPT =====
+        function attemptLogin(e) {
+            e.preventDefault();
+            if (blocked) return;
+
+            const username = document.getElementById('adminUsername').value.trim();
+            const password = document.getElementById('adminPassword').value;
+            const btn = document.getElementById('loginBtn');
+
+            if (!username || !password) {
+                showError('Login va parolni kiriting!');
+                return;
+            }
+
+            // Loading state
+            btn.classList.add('loading');
+            btn.disabled = true;
+            document.getElementById('errorMsg').classList.remove('show');
+
+            setTimeout(() => {
+                // Check credentials
+                const match = ADMIN_CREDENTIALS.find(
+                    c => c.username === username && c.password === password
+                );
+
+                if (match) {
+                    // Success
+                    sessionStorage.setItem('adminLoggedIn', 'true');
+                    sessionStorage.setItem('adminRole', match.role);
+                    sessionStorage.setItem('adminName', match.username);
+
+                    const overlay = document.getElementById('successOverlay');
+                    overlay.classList.add('show');
+                    setTimeout(() => {
+                        document.getElementById('progressFill').style.width = '100%';
+                    }, 100);
+                    setTimeout(() => {
+                        window.location.href = 'admin.html';
+                    }, 1800);
+
+                } else {
+                    // Wrong credentials
+                    attempts++;
+                    btn.classList.remove('loading');
+                    btn.disabled = false;
+
+                    const remaining = MAX_ATTEMPTS - attempts;
+
+                    if (attempts >= MAX_ATTEMPTS) {
+                        blockUser();
+                    } else {
+                        showError(`Login yoki parol noto'g'ri!`);
+                        if (remaining <= 3) {
+                            const attemptsEl = document.getElementById('attemptsInfo');
+                            attemptsEl.textContent = `⚠️ Yana ${remaining} ta noto'g'ri urinishdan so'ng kirish bloklanadi`;
+                            attemptsEl.classList.add('show');
+                        }
+                    }
+                }
+            }, 900);
+        }
+
+        // ===== Enter key =====
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Enter') {
+                document.getElementById('adminLoginForm').dispatchEvent(new Event('submit'));
+            }
+        });
+
+        // ===== Focus username on load =====
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('adminUsername').focus();
+        });
+    </script>
+</body>
+
+</html>

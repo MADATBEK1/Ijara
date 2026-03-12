@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="IjaraGo chat — ega yoki ijarachi bilan bevosita muloqot qiling." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat — IjaraGo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="enhancements.css" />
+    <style>
+        body {
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar scrolled" style="position:sticky;">
+        <div class="nav-container">
+            <a href="index.html" class="logo"><span class="logo-icon">🏠</span><span
+                    class="logo-text">IjaraGo</span></a>
+            <div class="nav-actions">
+                <a href="user-panel.html" class="btn btn-outline">← Paneliga qaytish</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="chat-layout">
+        <!-- Sidebar -->
+        <div class="chat-sidebar">
+            <div class="chat-header-bar">
+                💬 Suhbatlar
+                <span
+                    style="float:right;background:var(--danger);color:white;font-size:10px;padding:2px 8px;border-radius:100px;">3</span>
+            </div>
+            <div class="chat-list" id="chatList"></div>
+        </div>
+
+        <!-- Main -->
+        <div class="chat-main" id="chatMain">
+            <!-- Top -->
+            <div class="chat-top-bar" id="chatTopBar">
+                <img id="chatPartnerImg" src="" alt=""
+                    style="width:40px;height:40px;border-radius:50%;object-fit:cover;" />
+                <div>
+                    <div id="chatPartnerName" style="font-weight:700;font-size:15px;"></div>
+                    <div id="chatStatus" style="font-size:12px;color:var(--success);">● Online</div>
+                </div>
+                <div style="margin-left:auto;display:flex;gap:10px;">
+                    <a id="chatBookingLink" href="booking.html" class="btn btn-primary"
+                        style="font-size:13px;padding:8px 16px;">📅 Bron qilish</a>
+                    <button class="btn btn-outline" style="font-size:13px;padding:8px 14px;"
+                        onclick="showToast('Profil ko\'rilmoqda...','info')">👤 Profil</button>
+                </div>
+            </div>
+
+            <!-- Messages -->
+            <div class="chat-messages" id="chatMessages">
+                <div style="text-align:center;padding:20px;color:var(--gray);font-size:13px;">
+                    Chap tarafdan suhbatni tanlang
+                </div>
+            </div>
+
+            <!-- Input -->
+            <div class="chat-input-bar">
+                <button class="btn btn-outline" style="padding:11px 14px;"
+                    onclick="showToast('Fayl yuklash...','info')">📎</button>
+                <input type="text" class="chat-input" id="msgInput" placeholder="Xabar yozing..."
+                    onkeydown="if(event.key==='Enter')sendMessage()" />
+                <button class="btn btn-primary" onclick="sendMessage()">📤 Yuborish</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="data.js"></script>
+    <script src="main.js"></script>
+    <script>
+        const CONVERSATIONS = [
+            {
+                id: 1,
+                partner: 'Aziz Karimov',
+                partnerImg: 'https://i.pravatar.cc/80?img=11',
+                item: LISTINGS[0],
+                unread: 2,
+                messages: [
+                    { text: "Salom! Kvartira 1-5 Mart uchun bo'shmi?", sent: false, time: '10:30' },
+                    { text: "Ha, bo'sh! Narx kuniga 250,000 so'm.", sent: true, time: '10:32' },
+                    { text: "Ajoyib! Depozit qancha?", sent: false, time: '10:33' },
+                    { text: "500,000 so'm depozit. Bron qilsangiz bo'ladi.", sent: true, time: '10:34' },
+                    { text: "Yaxshi, qabul qildim. Bron qilaman!", sent: false, time: '10:35' },
+                ]
+            },
+            {
+                id: 2,
+                partner: 'Bobur Yusupov',
+                partnerImg: 'https://i.pravatar.cc/80?img=22',
+                item: LISTINGS[1],
+                unread: 1,
+                messages: [
+                    { text: "Toyota bo'shmi 8 Mart kuni?", sent: false, time: '09:15' },
+                    { text: "Ha, bo'sh! 350,000 so'm/kun.", sent: true, time: '09:20' },
+                    { text: "Haydovchi bilan ijaraga berish mumkinmi?", sent: false, time: '09:22' },
+                    { text: "Ha, haydovchi bilan +200,000 so'm qo'shiladi.", sent: true, time: '09:25' },
+                ]
+            },
+            {
+                id: 3,
+                partner: 'Shahzod Mirzo',
+                partnerImg: 'https://i.pravatar.cc/80?img=33',
+                item: LISTINGS[2],
+                unread: 0,
+                messages: [
+                    { text: "Kamera to'liq komplekt bilancmi?", sent: false, time: 'Kecha' },
+                    { text: "Ha, barcha linzalar va aksessuarlar bor!", sent: true, time: 'Kecha' },
+                    { text: "Rahmat, bron qildim!", sent: false, time: 'Kecha' },
+                ]
+            },
+        ];
+
+        let activeConv = null;
+
+        function renderChatList() {
+            document.getElementById('chatList').innerHTML = CONVERSATIONS.map(c => 
+      <div class="chat-list-item ${activeConv?.id === c.id ? 'active' : ''}" onclick="openConversation(${c.id})" id="conv-${c.id}">
+        <img src="${c.partnerImg}" alt="${c.partner}" onerror="this.src='https://i.pravatar.cc/60?img=1'"/>
+        <div style="flex:1;min-width:0;">
+          <div class="chat-name">${c.partner}</div>
+          <div class="chat-preview" style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">${c.messages[c.messages.length - 1].text}</div>
+        </div>
+        ${c.unread ? <span style="background:var(--danger);color:white;font-size:10px;padding:2px 7px;border-radius:100px;flex-shrink:0;">${c.unread}</span>` : ''}
+      </div>
+    ).join('');
+        }
+
+        function openConversation(id) {
+            activeConv = CONVERSATIONS.find(c => c.id === id);
+            if (!activeConv) return;
+            activeConv.unread = 0;
+
+            // Update partner info
+            document.getElementById('chatPartnerImg').src = activeConv.partnerImg;
+            document.getElementById('chatPartnerImg').onerror = () => { document.getElementById('chatPartnerImg').src = 'https://i.pravatar.cc/80?img=1'; };
+            document.getElementById('chatPartnerName').textContent = activeConv.partner;
+            document.getElementById('chatBookingLink').href = booking.html?id=${activeConv.item.id}`;
+
+            renderMessages();
+            renderChatList();
+        }
+
+        function renderMessages() {
+            if (!activeConv) return;
+            const box = document.getElementById('chatMessages');
+
+            let html = 
+      <div style="text-align:center;padding:12px;font-size:12px;color:var(--gray);background:rgba(255,255,255,.7);border-radius:10px;margin-bottom:8px;">
+        <strong>${activeConv.item.title}</strong> haqida suhbat
+        <br/><span>${formatPrice(activeConv.item.price)}/${activeConv.item.priceType} — 📍 ${activeConv.item.location}</span>
+      </div>
+    ;
+
+            html += activeConv.messages.map(m => 
+      <div class="message ${m.sent ? 'sent' : 'received'}">
+        ${m.text}
+        <div class="message-time">${m.time}</div>
+      </div>
+    ).join('');
+
+            box.innerHTML = html;
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('msgInput');
+            const text = input.value.trim();
+            if (!text || !activeConv) return;
+            activeConv.messages.push({ text, sent: true, time: new Date().toLocaleTimeString('uz', { hour: '2-digit', minute: '2-digit' }) });
+            input.value = '';
+            renderMessages();
+
+            // Simulate reply
+            setTimeout(() => {
+                const replies = ["Tushundim, rahmat!", "Ha, albatta.", "Qoʻshimcha savol bormi?", "Yaxshi, kutaman."];
+                activeConv.messages.push({ text: replies[Math.floor(Math.random() * replies.length)], sent: false, time: new Date().toLocaleTimeString('uz', { hour: '2-digit', minute: '2-digit' }) });
+                renderMessages();
+            }, 1200);
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            renderChatList();
+            // Open first by default on desktop
+            if (window.innerWidth > 768) openConversation(1);
+
+            // Check URL params
+            const params = new URLSearchParams(window.location.search);
+            const id = parseInt(params.get('id'));
+            if (id) {
+                const matching = CONVERSATIONS.find(c => c.item?.id === id);
+                if (matching) openConversation(matching.id);
+            }
+        });
+
+        function showToast(msg, type = 'info') {
+            const c = document.getElementById('toastContainer');
+            const t = document.createElement('div');
+            t.className = toast ${type}`;
+            t.textContent = msg;
+            c.appendChild(t);
+            requestAnimationFrame(() => t.classList.add('show'));
+            setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 400); }, 3000);
+        }
+    </script>
+</body>
+
+</html>

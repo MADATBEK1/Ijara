@@ -1,0 +1,375 @@
+﻿<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="IjaraGo'da ijara olish yoki berish juda oson! 3 qadamda ro'yxatdan o'ting, qidiring va bron qiling." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Qanday Ishlaydi — IjaraGo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="enhancements.css" />
+    <style>
+        .hiw-step {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            margin-bottom: 80px;
+        }
+
+        .hiw-step:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .hiw-step-content {
+            flex: 1;
+        }
+
+        .hiw-step-visual {
+            flex: 1;
+        }
+
+        .hiw-step-num {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .hiw-step-icon-big {
+            font-size: 80px;
+            text-align: center;
+        }
+
+        .hiw-visual-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+        }
+
+        .benefit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        .benefit-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 28px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+        }
+
+        .benefit-icon {
+            font-size: 40px;
+            margin-bottom: 14px;
+        }
+
+        .benefit-card h3 {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .benefit-card p {
+            font-size: 14px;
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        @media(max-width:768px) {
+            .hiw-step {
+                flex-direction: column !important;
+                gap: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo"><span class="logo-icon">🏠</span><span
+                    class="logo-text">IjaraGo</span></a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Bosh sahifa</a></li>
+                <li><a href="listings.html">E'lonlar</a></li>
+                <li><a href="categories.html">Kategoriyalar</a></li>
+                <li><a href="how-it-works.html" class="active">Qanday ishlaydi</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="dark-toggle" id="darkToggle" onclick="toggleDark()" title="Dark mode">🌙</button>
+                <a href="login.html" class="btn btn-outline">Kirish</a>
+                <a href="register.html" class="btn btn-primary">Ro'yxatdan o'tish</a>
+                <button class="hamburger" id="hamburger"
+                    onclick="toggleMenu()"><span></span><span></span><span></span></button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="page-hero">
+        <h1>Qanday Ishlaydi? 🤔</h1>
+        <p>IjaraGo bilan ijara olish va berish — eng oson yo'l</p>
+    </section>
+
+    <!-- IJARACHI UCHUN -->
+    <section class="section" style="background:white;">
+        <div class="container">
+            <div class="section-header"
+                style="justify-content:center;text-align:center;display:block;margin-bottom:64px;">
+                <h2>👤 Ijarachi uchun</h2>
+                <p style="margin-top:8px;">Kerakli narsangizni topib, osongina ijaraga oling</p>
+            </div>
+
+            <div class="hiw-step">
+                <div class="hiw-step-content">
+                    <div class="hiw-step-num">1</div>
+                    <h3 style="font-size:26px;font-weight:800;margin-bottom:12px;">Ro'yxatdan o'ting</h3>
+                    <p style="color:var(--gray);font-size:16px;line-height:1.7;margin-bottom:16px;">Telefon raqaming
+                        yoki email orqali 1 daqiqa ichida hisob yarating. Bu mutlaqo bepul.</p>
+                    <ul style="display:flex;flex-direction:column;gap:8px;">
+                        <li style="display:flex;align-items:center;gap:10px;font-size:15px;"><span
+                                style="color:var(--success);">✔</span> Email yoki telefon bilan kirish</li>
+                        <li style="display:flex;align-items:center;gap:10px;font-size:15px;"><span
+                                style="color:var(--success);">✔</span> Google akkaunt bilan 1 bosishda</li>
+                        <li style="display:flex;align-items:center;gap:10px;font-size:15px;"><span
+                                style="color:var(--success);">✔</span> Ma'lumotlaringiz xavfsiz</li>
+                    </ul>
+                    <div style="margin-top:20px;"><a href="register.html" class="btn btn-primary">Hozir ro'yxatdan
+                            o'ting →</a></div>
+                </div>
+                <div class="hiw-step-visual">
+                    <div class="hiw-visual-card">
+                        <div class="hiw-step-icon-big">👤</div>
+                        <div style="display:flex;flex-direction:column;gap:10px;margin-top:20px;">
+                            <div style="display:flex;gap:10px;">
+                                <div
+                                    style="flex:1;height:40px;background:var(--bg);border-radius:10px;border:1.5px solid var(--primary);display:flex;align-items:center;padding:0 14px;font-size:13px;color:var(--gray);">
+                                    📧 Email manzil</div>
+                            </div>
+                            <div
+                                style="height:40px;background:var(--bg);border-radius:10px;border:1.5px solid var(--border);display:flex;align-items:center;padding:0 14px;font-size:13px;color:var(--gray);">
+                                🔒 Parol</div>
+                            <div
+                                style="height:44px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:12px;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:14px;">
+                                Ro'yxatdan o'tish →</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hiw-step">
+                <div class="hiw-step-content">
+                    <div class="hiw-step-num">2</div>
+                    <h3 style="font-size:26px;font-weight:800;margin-bottom:12px;">Qidiring va toping</h3>
+                    <p style="color:var(--gray);font-size:16px;line-height:1.7;margin-bottom:16px;">2,400+ e'lon
+                        orasidan kategoriya, narx, joy va sana bo'yicha kerakli narsangizni toping.</p>
+                    <ul style="display:flex;flex-direction:column;gap:8px;">
+                        <li style="display:flex;align-items:center;gap:10px;font-size:15px;"><span
+                                style="color:var(--success);">✔</span> Kategoriya bo'yicha qidirish</li>
+                        <li style="display:flex;align-items:center;gap:10px;font-size:15px;"><span
+                                style="color:var(--success);">✔</span> Narx va joy filtrlari</li>
+                        <li style="display:flex;align-items:center;gap:10px;font-size:15px;"><span
+                                style="color:var(--success);">✔</span> Reyting va sharhlar</li>
+                    </ul>
+                </div>
+                <div class="hiw-step-visual">
+                    <div class="hiw-visual-card">
+                        <div class="hiw-step-icon-big">🔍</div>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;">
+                            <span
+                                style="padding:6px 14px;background:#eef2ff;color:var(--primary);border-radius:100px;font-size:12px;font-weight:600;">🏠
+                                Uylar</span>
+                            <span
+                                style="padding:6px 14px;background:#fffbeb;color:#92400e;border-radius:100px;font-size:12px;font-weight:600;">🚗
+                                Mashinalar</span>
+                            <span
+                                style="padding:6px 14px;background:#ecfdf5;color:#065f46;border-radius:100px;font-size:12px;font-weight:600;">🔌
+                                Texnika</span>
+                            <span
+                                style="padding:6px 14px;background:#fff1f2;color:#9f1239;border-radius:100px;font-size:12px;font-weight:600;">🪑
+                                Mebel</span>
+                            <span
+                                style="padding:6px 14px;background:#f5f3ff;color:#5b21b6;border-radius:100px;font-size:12px;font-weight:600;">🎉
+                                Tadbirlar</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hiw-step">
+                <div class="hiw-step-content">
+                    <div class="hiw-step-num">3</div>
+                    <h3 style="font-size:26px;font-weight:800;margin-bottom:12px;">Bron qiling</h3>
+                    <p style="color:var(--gray);font-size:16px;line-height:1.7;margin-bottom:16px;">Sanani tanlang,
+                        egasi bilan muloqot qiling va xavfsiz to'lov qiling. Hammasi bir joyda.</p>
+                    <ul style="display:flex;flex-direction:column;gap:8px;">
+                        <li style="display:flex;align-items:center;gap:10px;font-size:15px;"><span
+                                style="color:var(--success);">✔</span> Sana tanlash va mavjudligini ko'rish</li>
+                        <li style="display:flex;align-items:center;gap:10px;font-size:15px;"><span
+                                style="color:var(--success);">✔</span> Payme, Click orqali to'lov</li>
+                        <li style="display:flex;align-items:center;gap:10px;font-size:15px;"><span
+                                style="color:var(--success);">✔</span> Bekor qilish imkoniyati</li>
+                    </ul>
+                </div>
+                <div class="hiw-step-visual">
+                    <div class="hiw-visual-card">
+                        <div class="hiw-step-icon-big">📅</div>
+                        <div
+                            style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:16px;text-align:center;">
+                            <div style="font-size:10px;color:var(--gray);font-weight:700;">Du</div>
+                            <div style="font-size:10px;color:var(--gray);font-weight:700;">Se</div>
+                            <div style="font-size:10px;color:var(--gray);font-weight:700;">Ch</div>
+                            <div style="font-size:10px;color:var(--gray);font-weight:700;">Pa</div>
+                            <div style="font-size:10px;color:var(--gray);font-weight:700;">Ju</div>
+                            <div style="font-size:10px;color:var(--gray);font-weight:700;">Sh</div>
+                            <div style="font-size:10px;color:var(--gray);font-weight:700;">Ya</div>
+                            ${[1,2,3,4,5,6,7,8,9,10,11,12,13,14].map(d => <div
+                                style="padding:6px 2px;border-radius:8px;font-size:11px;font-weight:600;background:${[1,2,5,6].includes(d)?'#fee2e2':d===3?'var(--primary)':'#d1fae5'};color:${[1,2,5,6].includes(d)?'#991b1b':d===3?'white':'#065f46'}">
+                                ${d}</div>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EGA UCHUN -->
+    <section class="section" style="background:linear-gradient(135deg,#f8fafc,#eef2ff);">
+        <div class="container">
+            <div style="text-align:center;margin-bottom:64px;">
+                <h2 style="font-size:clamp(26px,4vw,40px);font-weight:800;">🏢 Ega uchun</h2>
+                <p style="color:var(--gray);font-size:16px;margin-top:8px;">Narsalaringizdan daromad toping</p>
+            </div>
+
+            <div
+                style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:24px;margin-bottom:48px;">
+                <div class="hiw-visual-card" style="text-align:center;">
+                    <div style="font-size:48px;margin-bottom:14px;">📸</div>
+                    <h3 style="font-size:18px;font-weight:700;margin-bottom:8px;">1. E'lon yarating</h3>
+                    <p style="font-size:14px;color:var(--gray);line-height:1.6;">Narx, tavsif va rasmlarni qo'shing. 5
+                        daqiqa yetarli!</p>
+                </div>
+                <div class="hiw-visual-card" style="text-align:center;">
+                    <div style="font-size:48px;margin-bottom:14px;">📥</div>
+                    <h3 style="font-size:18px;font-weight:700;margin-bottom:8px;">2. So'rovlarni qabul qiling</h3>
+                    <p style="font-size:14px;color:var(--gray);line-height:1.6;">Mijozlar bron qiladi, siz qabul qilasiz
+                        yoki rad etasiz.</p>
+                </div>
+                <div class="hiw-visual-card" style="text-align:center;">
+                    <div style="font-size:48px;margin-bottom:14px;">💰</div>
+                    <h3 style="font-size:18px;font-weight:700;margin-bottom:8px;">3. Daromad oling</h3>
+                    <p style="font-size:14px;color:var(--gray);line-height:1.6;">To'lov avtomatik tushadi. 5%
+                        komissiyani chegirib, qolgani sizniki.</p>
+                </div>
+            </div>
+
+            <div style="text-align:center;">
+                <a href="register.html" class="btn btn-primary btn-lg">🚀 Ega sifatida boshlash</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- AFZALLIKLAR -->
+    <section class="section" style="background:white;">
+        <div class="container">
+            <div style="text-align:center;margin-bottom:48px;">
+                <h2 style="font-size:clamp(26px,4vw,40px);font-weight:800;">Nima uchun IjaraGo? 🏆</h2>
+            </div>
+            <div class="benefit-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">🔒</div>
+                    <h3>Xavfsiz to'lovlar</h3>
+                    <p>Barcha to'lovlar SSL shifrlash va ishonchli to'lov tizimi orqali amalga oshiriladi.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">✔</div>
+                    <h3>Tasdiqlangan foydalanuvchilar</h3>
+                    <p>Barcha egalar shaxsiy hujjatlar orqali tasdiqlanadi. Soxta e'lonlar yo'q.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">💬</div>
+                    <h3>Real vaqtda chat</h3>
+                    <p>Egasi yoki ijarachi bilan to'g'ridan-to'g'ri gaplashing, savol bering.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">📅</div>
+                    <h3>Qulay bron tizimi</h3>
+                    <p>Kalendar orqali bo'sh kunlarni ko'ring va bir necha bosishda bron qiling.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">⭐</div>
+                    <h3>Shaffof reytinglar</h3>
+                    <p>Haqiqiy foydalanuvchilarning sharhlari va reytinglarini ko'ring.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🛡️</div>
+                    <h3>Ijara sug'urtasi</h3>
+                    <p>Premium e'lonlarda ijara sug'urtasi mavjud. Muammo bo'lsa biz qo'llaymiz.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section" style="background:linear-gradient(135deg,#0f172a,#1e1b4b);color:white;text-align:center;">
+        <div class="container">
+            <h2 style="font-size:clamp(28px,5vw,48px);font-weight:900;margin-bottom:16px;">Hozir boshlang! 🚀</h2>
+            <p style="color:rgba(255,255,255,.7);font-size:18px;max-width:500px;margin:0 auto 36px;">Minglab
+                foydalanuvchi allaqachon IjaraGo'dan foydalanmoqda</p>
+            <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+                <a href="register.html" class="btn btn-primary btn-lg">Ro'yxatdan o'tish</a>
+                <a href="listings.html" class="btn btn-ghost btn-lg">E'lonlarni ko'rish</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <a href="index.html" class="logo"><span class="logo-icon">🏠</span><span
+                        class="logo-text">IjaraGo</span></a>
+                <p>O'zbekistonda eng qulay ijara platformasi.</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-col">
+                    <h4>Sayt</h4><a href="listings.html">E'lonlar</a><a href="faq.html">FAQ</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Hisob</h4><a href="login.html">Kirish</a><a href="register.html">Ro'yxatdan o'tish</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 IjaraGo.</p>
+        </div>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="main.js"></script>
+
+    <script src="enhancements.js"></script>
+    <script src="support-chat.js"></script>
+</body>
+
+</html>

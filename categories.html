@@ -1,0 +1,267 @@
+﻿<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ijara Kategoriyalari — Uy, Mashina, Texnika | IjaraGo</title>
+    <meta name="description"
+        content="IjaraGo'da barcha ijara kategoriyalari: uylar, mashinalar, texnika, mebel, tadbir jihozlari va sport uskunalari. Kerakli kategoriyani tanlang!" />
+    <meta name="keywords" content="ijara kategoriyalar, uy ijarasi, mashina ijarasi, texnika ijarasi, mebel ijarasi" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://ijarego.uz/categories.html" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="enhancements.css" />
+    <style>
+        .cat-hero-card {
+            border-radius: var(--radius-lg);
+            padding: 48px 36px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            color: var(--dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+
+        .cat-hero-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            opacity: .08;
+            background: currentColor;
+        }
+
+        .cat-hero-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: currentColor;
+        }
+
+        .cat-hero-card .cat-big-icon {
+            font-size: 64px;
+        }
+
+        .cat-hero-card h3 {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .cat-hero-card p {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .cat-hero-card .cat-tag {
+            padding: 5px 14px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .trending-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 100px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo"><span class="logo-icon">🏠</span><span
+                    class="logo-text">IjaraGo</span></a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Bosh sahifa</a></li>
+                <li><a href="listings.html">E'lonlar</a></li>
+                <li><a href="categories.html" class="active">Kategoriyalar</a></li>
+                <li><a href="how-it-works.html">Qanday ishlaydi</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+            </ul>
+            <div class="nav-actions">
+
+
+                <button class="hamburger" id="hamburger"
+                    onclick="toggleMenu()"><span></span><span></span><span></span></button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="page-hero">
+        <h1>Kategoriyalar 🗂️</h1>
+        <p>Kerakli kategoriyani tanlang va eng yaxshi e'lonlarni toping</p>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div
+                style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px;margin-bottom:64px;">
+
+                <a href="listings.html?cat=uy" class="cat-hero-card" style="background:#eef2ff;color:#6366f1;">
+                    <span class="trending-badge">🔥 Trendda</span>
+                    <div class="cat-big-icon">🏠</div>
+                    <h3>Uylar va Kvartiralar</h3>
+                    <p>Toshkent, Samarqand, Buxoro va boshqa shaharlarda uy va kvartira ijarasi</p>
+                    <span class="cat-tag" style="background:#6366f1;color:white;">840 e'lon</span>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:4px;">
+                        <span
+                            style="font-size:11px;padding:3px 10px;background:rgba(99,102,241,.12);border-radius:100px;color:#6366f1;">Kvartira</span>
+                        <span
+                            style="font-size:11px;padding:3px 10px;background:rgba(99,102,241,.12);border-radius:100px;color:#6366f1;">Xona</span>
+                        <span
+                            style="font-size:11px;padding:3px 10px;background:rgba(99,102,241,.12);border-radius:100px;color:#6366f1;">Ofis</span>
+                        <span
+                            style="font-size:11px;padding:3px 10px;background:rgba(99,102,241,.12);border-radius:100px;color:#6366f1;">Dacha</span>
+                    </div>
+                </a>
+
+                <a href="listings.html?cat=mashina" class="cat-hero-card" style="background:#fffbeb;color:#f59e0b;">
+                    <div class="cat-big-icon">🚗</div>
+                    <h3>Mashinalar</h3>
+                    <p>Shaxsiy avtomobil, mikroavtobus, yuk mashinasi — barcha turdagi transport ijarasi</p>
+                    <span class="cat-tag" style="background:#f59e0b;color:white;">520 e'lon</span>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:4px;">
+                        <span
+                            style="font-size:11px;padding:3px 10px;background:rgba(245,158,11,.12);border-radius:100px;color:#d97706;">Sedan</span>
+                        <span
+                            style="font-size:11px;padding:3px 10px;background:rgba(245,158,11,.12);border-radius:100px;color:#d97706;">Krossover</span>
+                        <span
+                            style="font-size:11px;padding:3px 10px;background:rgba(245,158,11,.12);border-radius:100px;color:#d97706;">Mikroavtobus</span>
+                    </div>
+                </a>
+
+                <a href="listings.html?cat=texnika" class="cat-hero-card" style="background:#ecfdf5;color:#10b981;">
+                    <div class="cat-big-icon">🔌</div>
+                    <h3>Texnika va Uskunalar</h3>
+                    <p>Kamera, drone, proyektor, kompyuter va boshqa texnikalar ijarasi</p>
+                    <span class="cat-tag" style="background:#10b981;color:white;">380 e'lon</span>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:4px;">
+                        <span
+                            style="font-size:11px;padding:3px 10px;background:rgba(16,185,129,.12);border-radius:100px;color:#059669;">Kamera</span>
+                        <span
+                            style="font-size:11px;padding:3px 10px;background:rgba(16,185,129,.12);border-radius:100px;color:#059669;">Drone</span>
+                        <span
+                            style="font-size:11px;padding:3px 10px;background:rgba(16,185,129,.12);border-radius:100px;color:#059669;">Proyektor</span>
+                    </div>
+                </a>
+
+                <a href="listings.html?cat=mebel" class="cat-hero-card" style="background:#fff1f2;color:#f43f5e;">
+                    <div class="cat-big-icon">🪑</div>
+                    <h3>Mebel</h3>
+                    <p>Stol, stul, divan, shkaf va boshqa uy mebellarini ijaraga oling</p>
+                    <span class="cat-tag" style="background:#f43f5e;color:white;">210 e'lon</span>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:4px;">
+                        <span
+                            style="font-size:11px;padding:3px 10px;background:rgba(244,63,94,.12);border-radius:100px;color:#e11d48;">Stol-stullar</span>
+                        <span
+                            style="font-size:11px;padding:3px 10px;background:rgba(244,63,94,.12);border-radius:100px;color:#e11d48;">Divan</span>
+                        <span
+                            style="font-size:11px;padding:3px 10px;background:rgba(244,63,94,.12);border-radius:100px;color:#e11d48;">Shkaf</span>
+                    </div>
+                </a>
+
+                <a href="listings.html?cat=tadbir" class="cat-hero-card" style="background:#f5f3ff;color:#8b5cf6;">
+                    <span class="trending-badge" style="background:#8b5cf6;">⭐ Top</span>
+                    <div class="cat-big-icon">🎉</div>
+                    <h3>Tadbir Jihozlari</h3>
+                    <p>To'y, bayram, konferensiya uchun tent, stol-stullar, dekoratsiya ijarasi</p>
+                    <span class="cat-tag" style="background:#8b5cf6;color:white;">195 e'lon</span>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:4px;">
+                        <span
+                            style="font-size:11px;padding:3px 10px;background:rgba(139,92,246,.12);border-radius:100px;color:#7c3aed;">Tent</span>
+                        <span
+                            style="font-size:11px;padding:3px 10px;background:rgba(139,92,246,.12);border-radius:100px;color:#7c3aed;">Ovoz
+                            tizimi</span>
+                        <span
+                            style="font-size:11px;padding:3px 10px;background:rgba(139,92,246,.12);border-radius:100px;color:#7c3aed;">Dekor</span>
+                    </div>
+                </a>
+
+                <a href="listings.html?cat=sport" class="cat-hero-card" style="background:#ecfeff;color:#06b6d4;">
+                    <div class="cat-big-icon">⚽</div>
+                    <h3>Sport Jihozlari</h3>
+                    <p>Velosiped, skuter, sport qurilmalari va outdoor jihozlari ijarasi</p>
+                    <span class="cat-tag" style="background:#06b6d4;color:white;">148 e'lon</span>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:4px;">
+                        <span
+                            style="font-size:11px;padding:3px 10px;background:rgba(6,182,212,.12);border-radius:100px;color:#0891b2;">Velosiped</span>
+                        <span
+                            style="font-size:11px;padding:3px 10px;background:rgba(6,182,212,.12);border-radius:100px;color:#0891b2;">Skuter</span>
+                        <span
+                            style="font-size:11px;padding:3px 10px;background:rgba(6,182,212,.12);border-radius:100px;color:#0891b2;">Camping</span>
+                    </div>
+                </a>
+
+            </div>
+
+            <!-- Popular in each category -->
+            <div class="section-header">
+                <h2>Har bir kategoriyadan mashhurlar</h2>
+                <a href="listings.html" class="see-all-link">Barchasini ko'rish →</a>
+            </div>
+            <div class="listings-grid" id="categoryGrid"></div>
+        </div>
+    </section>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="detailModal" onclick="closeModal(event)">
+        <div class="modal-box"><button class="modal-close" onclick="closeDetailModal()">✕</button>
+            <div class="modal-content" id="modalContent"></div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <a href="index.html" class="logo"><span class="logo-icon">🏠</span><span
+                        class="logo-text">IjaraGo</span></a>
+                <p>O'zbekistonda eng qulay ijara platformasi.</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-col">
+                    <h4>Sayt</h4><a href="listings.html">E'lonlar</a><a href="faq.html">FAQ</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Hisob</h4><a href="login.html">Kirish</a><a href="register.html">Ro'yxatdan o'tish</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 IjaraGo.</p>
+        </div>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Show 1 from each category
+            const cats = ['uy', 'mashina', 'texnika', 'mebel', 'tadbir'];
+            const picks = cats.map(cat => LISTINGS.find(l => l.category === cat)).filter(Boolean);
+            document.getElementById('categoryGrid').innerHTML = picks.map(item => createCard(item)).join('');
+        });
+    </script>
+
+    <script src="enhancements.js"></script>
+    <script src="support-chat.js"></script>
+</body>
+
+</html>

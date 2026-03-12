@@ -1,0 +1,303 @@
+﻿<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IjaraGo — Uy, Mashina, Texnika Ijarasi | O'zbekiston</title>
+    <meta name="description"
+        content="IjaraGo — O'zbekistonda uy, mashina, texnika va boshqa buyumlarni ijaraga bering yoki oling. 2400+ faol e'lon, 15000+ foydalanuvchi. Tez, qulay, ishonchli." />
+    <meta name="keywords"
+        content="ijara, uy ijarasi, mashina ijarasi, texnika ijarasi, O'zbekiston ijara, Toshkent ijara, IjaraGo" />
+    <meta name="author" content="IjaraGo" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://ijarego.uz/" />
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="enhancements.css" />
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#6366f1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="IjaraGo" />
+    <link rel="apple-touch-icon" href="icon-192.png" />
+    <!-- Open Graph -->
+    <meta property="og:title" content="IjaraGo — O'zbekiston Ijara Platformasi" />
+    <meta property="og:description"
+        content="Uy, mashina, texnika ijarasi — 2400+ e'lon, tez va qulay. O'zbekistoning #1 ijara platformasi!" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://ijarego.uz/" />
+    <meta property="og:image" content="https://ijarego.uz/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="uz_UZ" />
+    <meta property="og:site_name" content="IjaraGo" />
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="IjaraGo — O'zbekiston Ijara Platformasi" />
+    <meta name="twitter:description" content="Uy, mashina, texnika ijarasi — tez va qulay" />
+    <meta name="twitter:image" content="https://ijarego.uz/og-image.png" />
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "IjaraGo",
+      "url": "https://ijarego.uz",
+      "description": "O'zbekistonda eng qulay ijara platformasi",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://ijarego.uz/listings.html?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🏠</span>
+                <span class="logo-text">IjaraGo</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html" class="active">Bosh sahifa</a></li>
+                <li><a href="listings.html">E'lonlar</a></li>
+                <li><a href="categories.html">Kategoriyalar</a></li>
+                <li><a href="how-it-works.html">Qanday ishlaydi</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="dark-toggle" id="darkToggle" onclick="toggleDark()" title="Dark mode">🌙</button>
+                <a href="login.html" class="btn btn-outline">Kirish</a>
+                <a href="register.html" class="btn btn-primary">Ro'yxatdan o'tish</a>
+                <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+        <div class="hero-bg">
+            <div class="hero-blob blob-1"></div>
+            <div class="hero-blob blob-2"></div>
+            <div class="hero-blob blob-3"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge">🇺🇿 O'zbekistoning #1 Ijara Platformasi</div>
+            <h1 class="hero-title">
+                Istalgan narsani<br />
+                <span class="gradient-text">ijaraga oling</span> yoki<br />
+                <span class="gradient-text-2">daromad toping</span>
+            </h1>
+            <p class="hero-subtitle">Uy, mashina, texnika, mebel — minglab e'lonlar bir joyda. Tez, qulay va ishonchli.
+            </p>
+
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <div class="search-category">
+                    <select id="searchCategory">
+                        <option value="">Barcha kategoriyalar</option>
+                        <option>🏠 Uylar</option>
+                        <option>🚗 Mashinalar</option>
+                        <option>🔌 Texnika</option>
+                        <option>🪑 Mebel</option>
+                        <option>🎉 Tadbir jihozlari</option>
+                    </select>
+                </div>
+                <div class="search-input-wrap">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" placeholder="Nima izlayapsiz? (uy, mashina, texnika...)" />
+                </div>
+                <button class="search-btn" onclick="doSearch()">Qidirish</button>
+            </div>
+
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <strong>2,400+</strong>
+                    <span>Faol e'lonlar</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <strong>15,000+</strong>
+                    <span>Foydalanuvchilar</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <strong>98%</strong>
+                    <span>Mamnun mijozlar</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CATEGORIES ===== -->
+    <section class="section categories-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Kategoriyalar</h2>
+                <p>Kerakli narsani tanlang va tez toping</p>
+            </div>
+            <div class="categories-grid">
+                <a href="listings.html?cat=uy" class="category-card" style="--cat-color: #6366f1; --cat-bg: #eef2ff;">
+                    <div class="cat-icon">🏠</div>
+                    <h3>Uylar</h3>
+                    <span class="cat-count">840 e'lon</span>
+                </a>
+                <a href="listings.html?cat=mashina" class="category-card"
+                    style="--cat-color: #f59e0b; --cat-bg: #fffbeb;">
+                    <div class="cat-icon">🚗</div>
+                    <h3>Mashinalar</h3>
+                    <span class="cat-count">520 e'lon</span>
+                </a>
+                <a href="listings.html?cat=texnika" class="category-card"
+                    style="--cat-color: #10b981; --cat-bg: #ecfdf5;">
+                    <div class="cat-icon">🔌</div>
+                    <h3>Texnika</h3>
+                    <span class="cat-count">380 e'lon</span>
+                </a>
+                <a href="listings.html?cat=mebel" class="category-card"
+                    style="--cat-color: #f43f5e; --cat-bg: #fff1f2;">
+                    <div class="cat-icon">🪑</div>
+                    <h3>Mebel</h3>
+                    <span class="cat-count">210 e'lon</span>
+                </a>
+                <a href="listings.html?cat=tadbir" class="category-card"
+                    style="--cat-color: #8b5cf6; --cat-bg: #f5f3ff;">
+                    <div class="cat-icon">🎉</div>
+                    <h3>Tadbir jihozlari</h3>
+                    <span class="cat-count">195 e'lon</span>
+                </a>
+                <a href="listings.html?cat=sport" class="category-card"
+                    style="--cat-color: #06b6d4; --cat-bg: #ecfeff;">
+                    <div class="cat-icon">⚽</div>
+                    <h3>Sport jihozlari</h3>
+                    <span class="cat-count">148 e'lon</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== LISTINGS ===== -->
+    <section class="section listings-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Yangi e'lonlar</h2>
+                <a href="listings.html" class="see-all-link">Barchasini ko'rish →</a>
+            </div>
+            <div class="listings-grid" id="listingsGrid">
+                <!-- Cards injected by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== HOW IT WORKS ===== -->
+    <section class="section how-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Qanday ishlaydi?</h2>
+                <p>3 oddiy qadamda ijara qiling</p>
+            </div>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-num">1</div>
+                    <div class="step-icon">🔍</div>
+                    <h3>Qidiring</h3>
+                    <p>Kerakli narsani kategoriya bo'yicha qidiring va filtrlang</p>
+                </div>
+                <div class="step-arrow">→</div>
+                <div class="step-card">
+                    <div class="step-num">2</div>
+                    <div class="step-icon">📅</div>
+                    <h3>Band qiling</h3>
+                    <p>Sanani tanlang va qaytarib berish muddatini belgilang</p>
+                </div>
+                <div class="step-arrow">→</div>
+                <div class="step-card">
+                    <div class="step-num">3</div>
+                    <div class="step-icon">🤝</div>
+                    <h3>Foydalaning</h3>
+                    <p>Egasi bilan bog'laning va buyumdan foydalaning</p>
+                </div>
+            </div>
+            <div class="how-cta">
+                <a href="register.html" class="btn btn-primary btn-lg">Hoziroq boshlash</a>
+                <a href="how-it-works.html" class="btn btn-ghost btn-lg">Batafsil ma'lumot</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TOP OWNERS ===== -->
+    <div id="topOwnersContainer"></div>
+
+    <!-- ===== MODAL — BATAFSIL ===== -->
+    <div class="modal-overlay" id="detailModal" onclick="closeModal(event)">
+        <div class="modal-box" id="modalBox">
+            <button class="modal-close" onclick="closeDetailModal()">✕</button>
+            <div class="modal-content" id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <a href="index.html" class="logo">
+                    <span class="logo-icon">🏠</span>
+                    <span class="logo-text">IjaraGo</span>
+                </a>
+                <p>O'zbekistonda eng qulay ijara platformasi. Tez, ishonchli va arzon.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link">📘</a>
+                    <a href="#" class="social-link">📸</a>
+                    <a href="#" class="social-link">✈️</a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <div class="footer-col">
+                    <h4>Sayt</h4>
+                    <a href="listings.html">E'lonlar</a>
+                    <a href="categories.html">Kategoriyalar</a>
+                    <a href="how-it-works.html">Qanday ishlaydi</a>
+                    <a href="faq.html">FAQ</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Hisob</h4>
+                    <a href="login.html">Kirish</a>
+                    <a href="register.html">Ro'yxatdan o'tish</a>
+                    <a href="user-panel.html">Foydalanuvchi paneli</a>
+                    <a href="owner-panel.html">Ega paneli</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Yordam</h4>
+                    <a href="faq.html">Savol-javoblar</a>
+                    <a href="contact.html">Aloqa</a>
+                    <a href="privacy.html">Maxfiylik</a>
+                    <a href="terms.html">Shartlar</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 IjaraGo. Barcha huquqlar himoyalangan.</p>
+        </div>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="main.js"></script>
+    <script src="auth.js"></script>
+    <script src="listings-store.js"></script>
+    <script src="widgets.js"></script>
+    <script src="enhancements.js"></script>
+</body>
+
+</html>

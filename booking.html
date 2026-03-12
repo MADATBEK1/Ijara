@@ -1,0 +1,195 @@
+﻿<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="IjaraGo — ijara bron qilish. Sanani tanlang va xavfsiz to'lov qiling." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Band qilish — IjaraGo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="enhancements.css" />
+</head>
+
+<body>
+
+    <nav class="navbar scrolled">
+        <div class="nav-container">
+            <a href="index.html" class="logo"><span class="logo-icon">🏠</span><span
+                    class="logo-text">IjaraGo</span></a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Bosh sahifa</a></li>
+                <li><a href="listings.html">E'lonlar</a></li>
+            </ul>
+            <div class="nav-actions">
+                
+                <button class="hamburger" id="hamburger"
+                    onclick="toggleMenu()"><span></span><span></span><span></span></button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="page-hero">
+        <h1>📅 Band qilish (Bron)</h1>
+        <p>Sana tanlang va ijara rasmiylashtiring</p>
+    </section>
+
+    <div class="section">
+        <div class="container">
+            <div class="booking-layout" id="bookingLayout">
+                <!-- Form -->
+                <div class="booking-form">
+                    <h2 style="font-size:22px;font-weight:800;margin-bottom:24px;">Bron ma'lumotlari</h2>
+
+                    <div id="selectedItemInfo"
+                        style="display:flex;gap:14px;align-items:center;padding:16px;background:var(--bg);border-radius:14px;margin-bottom:24px;border:1px solid var(--border);">
+                        <img id="bookingItemImg" src="" alt=""
+                            style="width:80px;height:64px;border-radius:12px;object-fit:cover;flex-shrink:0;" />
+                        <div>
+                            <h3 id="bookingItemTitle" style="font-size:16px;font-weight:700;"></h3>
+                            <div id="bookingItemLoc" style="font-size:13px;color:var(--gray);margin-top:2px;"></div>
+                            <div id="bookingItemPrice"
+                                style="font-size:15px;font-weight:800;color:var(--primary);margin-top:4px;"></div>
+                        </div>
+                    </div>
+
+                    <form onsubmit="submitBooking(event)">
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                            <div class="form-group">
+                                <label>📅 Boshlanish sanasi</label>
+                                <input type="date" id="startDate" required onchange="calcTotal()" />
+                            </div>
+                            <div class="form-group">
+                                <label>📅 Tugash sanasi</label>
+                                <input type="date" id="endDate" required onchange="calcTotal()" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>👛 To'lov usuli</label>
+                            <select id="payMethod" onchange="calcTotal()">
+                                <option value="card">💳 Bank kartasi</option>
+                                <option value="cash">💵 Naqd pul</option>
+                                <option value="payme">📱 Payme</option>
+                                <option value="click">📱 Click</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>📝 Qo'shimcha izoh (ixtiyoriy)</label>
+                            <textarea placeholder="Maxsus talablar, savollar..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label
+                                style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:13px;color:var(--dark-3);">
+                                <input type="checkbox" required
+                                    style="accent-color:var(--primary);width:16px;height:16px;flex-shrink:0;margin-top:2px;" />
+                                <span>Men <a href="#" style="color:var(--primary);">ijara shartlari</a> va <a href="#"
+                                        style="color:var(--primary);">qoidalarni</a> qabul qilaman</span>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg full-width" id="bookBtn">
+                            🚀 Bronni tasdiqlash
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Summary -->
+                <div class="booking-summary" id="bookingSummary">
+                    <h3>🧾 Hisob-kitob</h3>
+                    <div class="summary-item"><span>Kunlik narx</span><strong id="sumDaily">—</strong></div>
+                    <div class="summary-item"><span>Kunlar soni</span><strong id="sumDays">—</strong></div>
+                    <div class="summary-item"><span>Xizmat to'lovi (5%)</span><strong id="sumFee">—</strong></div>
+                    <div class="summary-item"><span>Depozit</span><strong id="sumDeposit"
+                            style="color:var(--secondary);">—</strong></div>
+                    <div class="summary-total">
+                        <span>Jami to'lov</span>
+                        <strong id="sumTotal" style="color:var(--primary);">—</strong>
+                    </div>
+                    <div
+                        style="margin-top:16px;padding:14px;background:#eef2ff;border-radius:12px;font-size:13px;color:var(--dark-3);line-height:1.6;">
+                        <strong>ℹ️ Eslatma:</strong> Depozit ijara tugagandan so'ng 3 ish kuni ichida qaytariladi.
+                    </div>
+                    <div
+                        style="margin-top:14px;padding:14px;background:#f0fdf4;border-radius:12px;font-size:13px;color:#065f46;line-height:1.6;">
+                        ✔ Bekor qilish: 48 soat oldin — to'liq qaytish<br />
+                        ✔ Sug'urta: ijara davomida qo'llaniladi
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-box" style="max-width:480px;padding:48px;text-align:center;">
+            <div style="font-size:72px;margin-bottom:20px;">🎉</div>
+            <h2 style="font-size:26px;font-weight:800;margin-bottom:10px;">Bron tasdiqlandi!</h2>
+            <p style="color:var(--gray);margin-bottom:28px;">Egasi tez orada siz bilan bog'lanadi. SMS orqali tasdiqlash
+                xabari yuborildi.</p>
+            <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+                <a href="user-panel.html" class="btn btn-primary btn-lg">📋 Buyurtmalarimga</a>
+                <a href="listings.html" class="btn btn-outline btn-lg">🔍 Yana qidirish</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="data.js"></script>
+    <script src="main.js"></script>
+    <script>
+        let currentItem = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const id = parseInt(params.get('id'));
+            currentItem = LISTINGS.find(l => l.id === id) || LISTINGS[0];
+
+            document.getElementById('bookingItemImg').src = currentItem.image;
+            document.getElementById('bookingItemTitle').textContent = currentItem.title;
+            document.getElementById('bookingItemLoc').textContent = '📍 ' + currentItem.location;
+            document.getElementById('bookingItemPrice').textContent = formatPrice(currentItem.price) + '/' + currentItem.priceType;
+            document.getElementById('sumDaily').textContent = formatPrice(currentItem.price);
+            document.getElementById('sumDeposit').textContent = formatPrice(currentItem.deposit);
+
+            // Set min dates
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('startDate').min = today;
+            document.getElementById('endDate').min = today;
+        });
+
+        function calcTotal() {
+            if (!currentItem) return;
+            const s = document.getElementById('startDate').value;
+            const e = document.getElementById('endDate').value;
+            if (!s || !e) return;
+            const days = Math.ceil((new Date(e) - new Date(s)) / 86400000);
+            if (days <= 0) { showToast('Tugash sanasi boshlanish sanasidan keyin bo\'lishi kerak', 'error'); return; }
+            const base = currentItem.price * days;
+            const fee = Math.round(base * 0.05);
+            const total = base + fee + currentItem.deposit;
+            document.getElementById('sumDays').textContent = days + ' kun';
+            document.getElementById('sumFee').textContent = formatPrice(fee);
+            document.getElementById('sumTotal').textContent = formatPrice(total);
+        }
+
+        function submitBooking(e) {
+            e.preventDefault();
+            const btn = document.getElementById('bookBtn');
+            btn.textContent = '⏳ Bronlanmoqda...';
+            btn.disabled = true;
+            setTimeout(() => {
+                document.getElementById('successModal').classList.add('active');
+            }, 1800);
+        }
+    </script>
+
+    <script src="support-chat.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,8 @@
+# Netlify _redirects file
+# IjaraGo deployment configuration
+
+# 404 sahifasi
+/*    /404.html   404
+
+# Admin sahifalarni himoya qilish (ixtiyoriy)
+# /admin.html    /login.html    302

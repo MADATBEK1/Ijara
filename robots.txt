@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Admin sahifalarni indekslash
+Disallow: /admin.html
+Disallow: /admin-login.html
+
+# Sitemap
+Sitemap: https://ijarego.uz/sitemap.xml

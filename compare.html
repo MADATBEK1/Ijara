@@ -1,0 +1,593 @@
+﻿<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E'lonlarni Solishtirish — IjaraGo</title>
+    <meta name="description" content="Bir nechta ijara e'lonlarini yon-yon solishtiring va eng yaxshisini tanlang." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="enhancements.css" />
+    <style>
+        .compare-hero {
+            background: linear-gradient(135deg, #0f172a, #1e1b4b);
+            padding: 60px 24px 40px;
+            text-align: center;
+            color: white;
+        }
+
+        .compare-hero h1 {
+            font-size: 36px;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .compare-hero p {
+            color: rgba(255, 255, 255, .6);
+            font-size: 16px;
+        }
+
+        .compare-wrap {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+        }
+
+        /* Picker */
+        .picker-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 36px;
+        }
+
+        .picker-slot {
+            background: var(--white);
+            border: 2px dashed var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            text-align: center;
+            transition: var(--transition);
+            min-height: 160px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+        }
+
+        .picker-slot.filled {
+            border-style: solid;
+            border-color: var(--primary);
+            background: linear-gradient(135deg, #f5f3ff, #eef2ff);
+        }
+
+        body.dark .picker-slot.filled {
+            background: rgba(99, 102, 241, .1);
+        }
+
+        .picker-slot img {
+            width: 100%;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .picker-slot h4 {
+            font-size: 13px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .picker-slot .remove-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .add-slot-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .add-slot-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            box-shadow: 0 6px 20px rgba(99, 102, 241, .4);
+        }
+
+        /* Comparison Table */
+        .compare-table-wrap {
+            background: var(--white);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .compare-table th,
+        .compare-table td {
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        .compare-table th {
+            background: var(--bg);
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            width: 160px;
+            min-width: 160px;
+        }
+
+        .compare-table td {
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .compare-table tr:last-child th,
+        .compare-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .compare-table tr:hover td {
+            background: #f8fafc;
+        }
+
+        body.dark .compare-table tr:hover td {
+            background: rgba(255, 255, 255, .03);
+        }
+
+        .winner-cell {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0) !important;
+            color: #065f46 !important;
+            font-weight: 800 !important;
+            position: relative;
+        }
+
+        body.dark .winner-cell {
+            background: rgba(16, 185, 129, .15) !important;
+            color: #34d399 !important;
+        }
+
+        .winner-badge {
+            font-size: 10px;
+            background: #10b981;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 100px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        .col-img-cell {
+            padding: 0 !important;
+            position: relative;
+        }
+
+        .col-img-cell img {
+            width: 100%;
+            height: 130px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .col-img-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 8px 12px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, .7));
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .compare-empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--gray);
+        }
+
+        .compare-empty .empty-icon {
+            font-size: 56px;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        /* Picker modal */
+        .picker-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .55);
+            z-index: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: .3s;
+            backdrop-filter: blur(4px);
+        }
+
+        .picker-modal-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .picker-modal {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 28px;
+            max-width: 600px;
+            width: 92%;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: scale(.95);
+            transition: .3s;
+        }
+
+        .picker-modal-overlay.open .picker-modal {
+            transform: scale(1);
+        }
+
+        .picker-modal h3 {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .picker-search {
+            width: 100%;
+            padding: 11px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            font-family: var(--font);
+            font-size: 14px;
+            outline: none;
+            background: var(--bg);
+            color: var(--dark);
+            margin-bottom: 16px;
+        }
+
+        .picker-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .picker-list-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .picker-list-item:hover {
+            border-color: var(--primary);
+            background: #f5f3ff;
+        }
+
+        body.dark .picker-list-item:hover {
+            background: rgba(99, 102, 241, .08);
+        }
+
+        .picker-list-item img {
+            width: 60px;
+            height: 46px;
+            border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .picker-list-item h4 {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .picker-list-item p {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        .feature-check {
+            color: #10b981;
+            font-weight: 700;
+        }
+
+        .feature-x {
+            color: #f43f5e;
+            font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+            .picker-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .compare-table th {
+                font-size: 12px;
+                width: 100px;
+                min-width: 100px;
+                padding: 10px;
+            }
+
+            .compare-table td {
+                font-size: 13px;
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .picker-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar scrolled">
+        <div class="nav-container">
+            <a href="index.html" class="logo"><span class="logo-icon">🏠</span><span
+                    class="logo-text">IjaraGo</span></a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Bosh sahifa</a></li>
+                <li><a href="listings.html">E'lonlar</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="dark-toggle" id="darkToggle" onclick="toggleDark()">🌙</button>
+                <a href="listings.html" class="btn btn-outline">← E'lonlar</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="compare-hero">
+        <h1>⚖️ E'lonlarni Solishtirish</h1>
+        <p>Bir nechta variantni yon-yoniga qo'yib, eng qulay va foydalisini tanlang</p>
+    </div>
+
+    <div class="compare-wrap">
+
+        <!-- Picker slots -->
+        <div class="picker-row" id="pickerRow"></div>
+
+        <!-- Table -->
+        <div id="compareTableWrap">
+            <div class="compare-empty" id="compareEmpty">
+                <span class="empty-icon">⚖️</span>
+                <h3>Hech narsa tanlanmagan</h3>
+                <p>Solishtirish uchun yuqoridan kamida 2 ta e'lon qo'shing</p>
+            </div>
+            <div class="compare-table-wrap" id="compareTableBox" style="display:none;">
+                <table class="compare-table" id="compareTable"></table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Picker Modal -->
+    <div class="picker-modal-overlay" id="pickerModal" onclick="closePickerModal(event)">
+        <div class="picker-modal">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+                <h3>📋 E'lon tanlang</h3>
+                <button onclick="document.getElementById('pickerModal').classList.remove('open')"
+                    style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--gray);">✕</button>
+            </div>
+            <input type="text" class="picker-search" id="pickerSearch" placeholder="🔍 E'lon qidiring..."
+                oninput="renderPickerList()" />
+            <div class="picker-list" id="pickerList"></div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="data.js"></script>
+    <script src="main.js"></script>
+    <script>
+        const MAX_COMPARE = 3;
+        let compared = []; // array of listing IDs
+        let activeSlot = 0;
+
+        // ===== SLOTS =====
+        function renderSlots() {
+            const row = document.getElementById('pickerRow');
+            row.innerHTML = '';
+
+            for (let i = 0; i < MAX_COMPARE; i++) {
+                const item = compared[i] ? LISTINGS.find(l => l.id === compared[i]) : null;
+                const slot = document.createElement('div');
+                slot.className = 'picker-slot' + (item ? ' filled' : '');
+
+                if (item) {
+                    slot.innerHTML = 
+                        <button class="remove-btn" onclick="removeItem(${i})" title="Olib tashlash">✕</button>
+                        <img src="${item.image}" alt="${item.title}" onerror="this.src='https://via.placeholder.com/200x90'" />
+                        <h4>${item.title}</h4>
+                        <span style="font-size:12px;font-weight:800;color:var(--primary);">${formatPrice(item.price)}/${item.priceType}</span>
+                    ;
+                } else {
+                    slot.innerHTML = 
+                        <button class="add-slot-btn" onclick="openPickerModal(${i})">
+                            <span class="add-slot-icon">+</span>
+                            <span>E'lon qo'shish</span>
+                        </button>
+                    ;
+                }
+                row.appendChild(slot);
+            }
+
+            renderCompareTable();
+        }
+
+        function removeItem(idx) {
+            compared.splice(idx, 1);
+            renderSlots();
+        }
+
+        // ===== PICKER MODAL =====
+        function openPickerModal(slotIdx) {
+            activeSlot = slotIdx;
+            document.getElementById('pickerSearch').value = '';
+            document.getElementById('pickerModal').classList.add('open');
+            renderPickerList();
+        }
+
+        function closePickerModal(e) {
+            if (e.target === document.getElementById('pickerModal'))
+                document.getElementById('pickerModal').classList.remove('open');
+        }
+
+        function renderPickerList() {
+            const q = document.getElementById('pickerSearch').value.toLowerCase();
+            const filtered = LISTINGS.filter(l =>
+                !compared.includes(l.id) &&
+                (l.title.toLowerCase().includes(q) || l.location.toLowerCase().includes(q) || l.category.includes(q))
+            );
+            document.getElementById('pickerList').innerHTML = filtered.map(l => 
+                <div class="picker-list-item" onclick="selectItem(${l.id})">
+                    <img src="${l.image}" alt="${l.title}" onerror="this.src='https://via.placeholder.com/60x46'" />
+                    <div>
+                        <h4>${l.title}</h4>
+                        <p>📍 ${l.location} &nbsp;|&nbsp; ${formatPrice(l.price)}/${l.priceType} &nbsp;|&nbsp; ★ ${l.rating}</p>
+                    </div>
+                </div>
+            ).join('') || '<p style="text-align:center;color:var(--gray);padding:20px;">E\'lon topilmadi</p>';
+        }
+
+        function selectItem(id) {
+            if (compared.length >= MAX_COMPARE && activeSlot >= compared.length) {
+                showToast('Maksimum 3 ta e\'lon solishtirish mumkin!', 'info');
+                return;
+            }
+            compared[activeSlot] = id;
+            document.getElementById('pickerModal').classList.remove('open');
+            renderSlots();
+        }
+
+        // ===== COMPARISON TABLE =====
+        function renderCompareTable() {
+            const items = compared.map(id => LISTINGS.find(l => l.id === id)).filter(Boolean);
+
+            if (items.length < 2) {
+                document.getElementById('compareEmpty').style.display = 'block';
+                document.getElementById('compareTableBox').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('compareEmpty').style.display = 'none';
+            document.getElementById('compareTableBox').style.display = 'block';
+
+            const ROWS = [
+                { key: 'image', label: '📷 Rasm', render: (item, _isWinner) => <td class="col-img-cell"><img src="${item.image}" alt="${item.title}" onerror="this.src='https://via.placeholder.com/300x130'"/><div class="col-img-overlay">${item.title}</div></td>` },
+                { key: 'title', label: '📋 Nomi', val: i => i.title },
+                { key: 'category', label: '🗂️ Kategoriya', val: i => i.categoryLabel },
+                { key: 'price', label: '💰 Narx', val: i => formatPrice(i.price) + '/' + i.priceType, num: i => i.price, lowerBetter: true },
+                { key: 'deposit', label: '🔒 Depozit', val: i => formatPrice(i.deposit), num: i => i.deposit, lowerBetter: true },
+                { key: 'rating', label: '⭐ Reyting', val: i => '★ ' + i.rating + ' (' + i.reviews + ' sharh)', num: i => i.rating },
+                { key: 'location', label: '📍 Manzil', val: i => i.location },
+                { key: 'minDays', label: '📅 Min. muddat', val: i => i.minDays + ' kun', num: i => i.minDays, lowerBetter: true },
+                { key: 'features', label: '✨ Imkoniyatlar', val: i => i.features.slice(0, 4).join(' · ') },
+                { key: 'verified', label: '✔ Tasdiqlangan', val: i => i.verified ? '<span class="feature-check">✔ Ha</span>' : '<span class="feature-x">✕ Yo\'q</span>' },
+                { key: 'premium', label: '⭐ Premium', val: i => i.premium ? '<span class="feature-check">✔ Ha</span>' : '<span class="feature-x">✕ Yo\'q</span>' },
+                { key: 'owner', label: '👤 Ega', val: i => <img src="${i.ownerImg}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:6px;" onerror="this.src='https://i.pravatar.cc/24'" /> ${i.owner}` },
+                { key: 'action', label: '🚀 Harakat', render: (item) => <td><a href="listing-detail.html?id=${item.id}" class="btn btn-primary" style="font-size:13px;padding:9px 18px;">Batafsil</a> <a href="booking.html?id=${item.id}" class="btn btn-outline" style="font-size:13px;padding:9px 18px;margin-top:6px;display:inline-block;">Bron</a></td>` },
+            ];
+
+            let html = '<tbody>';
+
+            ROWS.forEach(row => {
+                html += '<tr>';
+                html += <th>${row.label}</th>`;
+
+                // Find winner for numeric rows
+                let winnerIdx = -1;
+                if (row.num) {
+                    const nums = items.map(i => row.num(i));
+                    const best = row.lowerBetter ? Math.min(...nums) : Math.max(...nums);
+                    winnerIdx = nums.indexOf(best);
+                }
+
+                items.forEach((item, idx) => {
+                    if (row.render) {
+                        html += row.render(item, idx === winnerIdx);
+                    } else {
+                        const isWinner = idx === winnerIdx;
+                        html += <td class="${isWinner ? 'winner-cell' : ''}">${row.val(item)}${isWinner ? '<span class="winner-badge">BEST</span>' : ''}</td>`;
+                    }
+                });
+
+                // Empty columns if less than 3 items
+                for (let i = items.length; i < MAX_COMPARE; i++) {
+                    html += '<td style="background:var(--bg);color:var(--gray);font-size:13px;text-align:center;">—</td>';
+                }
+
+                html += '</tr>';
+            });
+
+            html += '</tbody>';
+            document.getElementById('compareTable').innerHTML = html;
+        }
+
+        // ===== INIT =====
+        document.addEventListener('DOMContentLoaded', () => {
+            // Pre-load from URL params
+            const params = new URLSearchParams(location.search);
+            const ids = params.get('ids');
+            if (ids) {
+                compared = ids.split(',').map(Number).filter(id => LISTINGS.find(l => l.id === id)).slice(0, MAX_COMPARE);
+            }
+            renderSlots();
+        });
+    </script>
+
+    <script src="support-chat.js"></script>
+</body>
+
+</html>

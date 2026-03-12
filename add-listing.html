@@ -1,0 +1,1429 @@
+﻿<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E'lon Qo'shish — IjaraGo</title>
+    <meta name="description" content="IjaraGo da o'z mulkingizni ijaraga bering. Uy, mashina, texnika va boshqalar." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="enhancements.css" />
+    <style>
+        :root {
+            --al-teal: #0ea5e9;
+        }
+
+        .add-listing-hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 60%, #0f4c75 100%);
+            padding: 100px 24px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .add-listing-hero::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(99, 102, 241, .25) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .add-listing-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -80px;
+            left: -80px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(16, 185, 129, .2) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .add-listing-hero h1 {
+            font-size: clamp(28px, 5vw, 52px);
+            font-weight: 900;
+            color: white;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .add-listing-hero p {
+            color: rgba(255, 255, 255, .7);
+            font-size: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Steps indicator */
+        .steps-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            margin: 40px auto 0;
+            max-width: 600px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-dot {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .step-dot-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .15);
+            border: 2px solid rgba(255, 255, 255, .3);
+            color: rgba(255, 255, 255, .6);
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .3s ease;
+        }
+
+        .step-dot.active .step-dot-circle {
+            background: #6366f1;
+            border-color: #6366f1;
+            color: white;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, .3);
+        }
+
+        .step-dot.done .step-dot-circle {
+            background: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+
+        .step-dot-label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, .5);
+            font-weight: 600;
+        }
+
+        .step-dot.active .step-dot-label {
+            color: white;
+        }
+
+        .step-dot.done .step-dot-label {
+            color: rgba(255, 255, 255, .8);
+        }
+
+        .step-line {
+            height: 2px;
+            flex: 1;
+            background: rgba(255, 255, 255, .15);
+            margin-bottom: 22px;
+            transition: background .3s;
+        }
+
+        .step-line.done {
+            background: #10b981;
+        }
+
+        /* Form Layout */
+        .add-listing-layout {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 48px 24px 80px;
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 32px;
+            align-items: start;
+        }
+
+        @media(max-width: 768px) {
+            .add-listing-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Form Card */
+        .form-card {
+            background: var(--white);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .form-card-head {
+            padding: 24px 28px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, .06), rgba(139, 92, 246, .04));
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .form-card-head .step-badge {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .form-card-head h2 {
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .form-card-body {
+            padding: 28px;
+        }
+
+        /* Step panels */
+        .step-panel {
+            display: none;
+        }
+
+        .step-panel.active {
+            display: block;
+        }
+
+        /* Form groups */
+        .al-form-group {
+            margin-bottom: 20px;
+        }
+
+        .al-form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 7px;
+        }
+
+        .al-form-group label .req {
+            color: #f43f5e;
+            margin-left: 2px;
+        }
+
+        .al-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            font-family: var(--font);
+            font-size: 14px;
+            color: var(--dark);
+            background: var(--white);
+            outline: none;
+            transition: all .2s ease;
+        }
+
+        .al-input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, .12);
+        }
+
+        .al-input.error {
+            border-color: #f43f5e;
+        }
+
+        .al-textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .al-select {
+            appearance: none;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 7L11 1' stroke='%2364748b' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+        }
+
+        .al-form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media(max-width: 500px) {
+            .al-form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Category picker */
+        .cat-picker {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 4px;
+        }
+
+        .cat-option {
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            padding: 14px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all .2s ease;
+            background: var(--bg);
+        }
+
+        .cat-option:hover {
+            border-color: #6366f1;
+            background: #eef2ff;
+            transform: translateY(-2px);
+        }
+
+        .cat-option.selected {
+            border-color: #6366f1;
+            background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, .15);
+        }
+
+        .cat-option .cat-emoji {
+            font-size: 26px;
+            margin-bottom: 6px;
+        }
+
+        .cat-option span {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--dark);
+            display: block;
+        }
+
+        /* Features tags */
+        .features-container {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding: 12px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            min-height: 50px;
+            background: var(--white);
+            cursor: text;
+        }
+
+        .feature-tag-al {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+            color: #4f46e5;
+            padding: 5px 12px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid #c7d2fe;
+        }
+
+        .feature-tag-al button {
+            background: none;
+            border: none;
+            color: #818cf8;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .feature-tag-al button:hover {
+            color: #f43f5e;
+        }
+
+        .features-input {
+            border: none;
+            outline: none;
+            font-family: var(--font);
+            font-size: 13px;
+            background: transparent;
+            min-width: 120px;
+            flex: 1;
+            color: var(--dark);
+        }
+
+        .features-input::placeholder {
+            color: var(--gray-light);
+        }
+
+        /* Image upload */
+        .image-upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 16px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all .3s ease;
+            position: relative;
+            background: var(--bg);
+        }
+
+        .image-upload-area:hover {
+            border-color: #6366f1;
+            background: #eef2ff;
+        }
+
+        .image-upload-area.has-url {
+            border-color: #10b981;
+            background: #ecfdf5;
+        }
+
+        .image-upload-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        .image-upload-area p {
+            font-size: 14px;
+            color: var(--gray);
+            margin-bottom: 4px;
+        }
+
+        .image-upload-area small {
+            font-size: 12px;
+            color: var(--gray-light);
+        }
+
+        .image-preview {
+            width: 100%;
+            height: 180px;
+            border-radius: 12px;
+            object-fit: cover;
+            display: none;
+            margin-top: 12px;
+        }
+
+        /* Price input */
+        .price-input-wrap {
+            position: relative;
+        }
+
+        .price-suffix {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray);
+            pointer-events: none;
+        }
+
+        .price-input-wrap .al-input {
+            padding-right: 60px;
+        }
+
+        /* Navigation buttons */
+        .form-nav-btns {
+            display: flex;
+            gap: 12px;
+            justify-content: space-between;
+            margin-top: 28px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn-prev {
+            background: var(--bg);
+            color: var(--dark);
+            border: 1.5px solid var(--border);
+            padding: 12px 28px;
+            border-radius: 12px;
+            font-family: var(--font);
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .btn-prev:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 12px;
+            font-family: var(--font);
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all .3s cubic-bezier(.34, 1.56, .64, 1);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, .4);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, .5);
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, .35);
+        }
+
+        .btn-submit:hover {
+            box-shadow: 0 8px 25px rgba(16, 185, 129, .5);
+        }
+
+        /* Sidebar Preview */
+        .preview-card {
+            background: var(--white);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 90px;
+            overflow: hidden;
+        }
+
+        .preview-card-head {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 700;
+            font-size: 14px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, .06), rgba(5, 150, 105, .04));
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .preview-image {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #e0e7ff, #ddd6fe);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+
+        .preview-image img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .preview-body {
+            padding: 16px 20px;
+        }
+
+        .preview-cat {
+            font-size: 11px;
+            color: var(--primary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            margin-bottom: 6px;
+        }
+
+        .preview-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 6px;
+            line-height: 1.3;
+        }
+
+        .preview-location {
+            font-size: 13px;
+            color: var(--gray);
+            margin-bottom: 12px;
+        }
+
+        .preview-price {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .preview-price span {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray);
+        }
+
+        .preview-placeholder {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+            font-size: 13px;
+        }
+
+        /* Tips box */
+        .tips-box {
+            background: linear-gradient(135deg, #fffbeb, #fef3c7);
+            border: 1px solid #fde68a;
+            border-radius: 14px;
+            padding: 16px 18px;
+            margin-top: 20px;
+        }
+
+        .tips-box h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 8px;
+        }
+
+        .tips-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tips-box ul li {
+            font-size: 12px;
+            color: #78350f;
+            margin-bottom: 4px;
+            display: flex;
+            gap: 6px;
+        }
+
+        /* Success state */
+        .success-panel {
+            text-align: center;
+            padding: 60px 32px;
+        }
+
+        .success-icon {
+            font-size: 72px;
+            margin-bottom: 20px;
+            animation: bounce-in .6s cubic-bezier(.34, 1.56, .64, 1);
+        }
+
+        @keyframes bounce-in {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .success-panel h2 {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 12px;
+        }
+
+        .success-panel p {
+            color: var(--gray);
+            font-size: 15px;
+            margin-bottom: 28px;
+            line-height: 1.6;
+        }
+
+        .success-btns {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Error message */
+        .field-error {
+            font-size: 12px;
+            color: #f43f5e;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .field-error.show {
+            display: block;
+        }
+
+        /* Dark mode */
+        body.dark .form-card,
+        body.dark .preview-card {
+            background: #1e293b;
+            border-color: #334155;
+        }
+
+        body.dark .al-input {
+            background: #0f172a;
+            color: white;
+            border-color: #334155;
+        }
+
+        body.dark .features-container {
+            background: #0f172a;
+            border-color: #334155;
+        }
+
+        body.dark .cat-option {
+            background: #0f172a;
+            border-color: #334155;
+        }
+
+        body.dark .cat-option.selected {
+            background: #1e1b4b;
+        }
+
+        body.dark .image-upload-area {
+            background: #0f172a;
+            border-color: #334155;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🏠</span>
+                <span class="logo-text">IjaraGo</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Bosh sahifa</a></li>
+                <li><a href="listings.html">E'lonlar</a></li>
+                <li><a href="categories.html">Kategoriyalar</a></li>
+                <li><a href="how-it-works.html">Qanday ishlaydi</a></li>
+                <li><a href="add-listing.html" class="active">E'lon qo'shish</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="dark-toggle" id="darkToggle" onclick="toggleDark()" title="Dark mode">🌙</button>
+                <button class="hamburger" id="hamburger"
+                    onclick="toggleMenu()"><span></span><span></span><span></span></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <div class="add-listing-hero">
+        <div class="hero-badge" style="margin-bottom:20px;" id="authBadge">➕ E'lon qo'shish</div>
+        <h1>Mulkingizni Ijaraga Bering<br><span class="gradient-text">va Daromad Toping</span></h1>
+        <p>3 oddiy qadam bilan e'loningizni joylashtiring — admin tasdiqlashidan keyin chiqadi</p>
+
+        <!-- Steps indicator -->
+        <div class="steps-indicator" id="stepsIndicator">
+            <div class="step-dot active" id="sdot1">
+                <div class="step-dot-circle">1</div>
+                <div class="step-dot-label">Kategoriya</div>
+            </div>
+            <div class="step-line" id="sline1"></div>
+            <div class="step-dot" id="sdot2">
+                <div class="step-dot-circle">2</div>
+                <div class="step-dot-label">Ma'lumotlar</div>
+            </div>
+            <div class="step-line" id="sline2"></div>
+            <div class="step-dot" id="sdot3">
+                <div class="step-dot-circle">3</div>
+                <div class="step-dot-label">Tasdiqlash</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN LAYOUT -->
+    <div class="add-listing-layout">
+        <!-- FORM CARD -->
+        <div class="form-card" id="formCard">
+            <div class="form-card-head">
+                <div class="step-badge" id="cardStepBadge">1</div>
+                <div>
+                    <h2 id="cardStepTitle">Kategoriya va asosiy ma'lumotlar</h2>
+                    <p style="font-size:13px;color:var(--gray);margin-top:2px;" id="cardStepSub">E'loningiz qaysi
+                        bo'limga kiradi?</p>
+                </div>
+            </div>
+            <div class="form-card-body">
+
+                <!-- STEP 1: Kategoriya + Asosiy -->
+                <div class="step-panel active" id="step1">
+                    <!-- Category picker -->
+                    <div class="al-form-group">
+                        <label>Kategoriya <span class="req">*</span></label>
+                        <div class="cat-picker">
+                            <div class="cat-option" data-cat="uy" data-label="🏠 Uylar" onclick="selectCat(this)">
+                                <div class="cat-emoji">🏠</div>
+                                <span>Uylar</span>
+                            </div>
+                            <div class="cat-option" data-cat="mashina" data-label="🚗 Mashinalar"
+                                onclick="selectCat(this)">
+                                <div class="cat-emoji">🚗</div>
+                                <span>Mashinalar</span>
+                            </div>
+                            <div class="cat-option" data-cat="texnika" data-label="🔌 Texnika"
+                                onclick="selectCat(this)">
+                                <div class="cat-emoji">🔌</div>
+                                <span>Texnika</span>
+                            </div>
+                            <div class="cat-option" data-cat="mebel" data-label="🪑 Mebel" onclick="selectCat(this)">
+                                <div class="cat-emoji">🪑</div>
+                                <span>Mebel</span>
+                            </div>
+                            <div class="cat-option" data-cat="tadbir" data-label="🎉 Tadbir jihozlari"
+                                onclick="selectCat(this)">
+                                <div class="cat-emoji">🎉</div>
+                                <span>Tadbir</span>
+                            </div>
+                            <div class="cat-option" data-cat="sport" data-label="⚽ Sport jihozlari"
+                                onclick="selectCat(this)">
+                                <div class="cat-emoji">⚽</div>
+                                <span>Sport</span>
+                            </div>
+                        </div>
+                        <div class="field-error" id="catError">Kategoriyani tanlang!</div>
+                    </div>
+
+                    <!-- Title -->
+                    <div class="al-form-group">
+                        <label for="listingTitle">E'lon sarlavhasi <span class="req">*</span></label>
+                        <input type="text" class="al-input" id="listingTitle"
+                            placeholder="Masalan: Zamonaviy 2 xonali kvartira, Toyota Camry 2022..." maxlength="80"
+                            oninput="updatePreview()" />
+                        <div class="field-error" id="titleError">Sarlavhani kiriting!</div>
+                    </div>
+
+                    <!-- Location -->
+                    <div class="al-form-group">
+                        <label for="listingLocation">Manzil <span class="req">*</span></label>
+                        <select class="al-input al-select" id="listingLocation" onchange="updatePreview()">
+                            <option value="">Shahar tanlang</option>
+                            <optgroup label="Toshkent">
+                                <option value="Toshkent, Chilonzor">Toshkent, Chilonzor</option>
+                                <option value="Toshkent, Yunusobod">Toshkent, Yunusobod</option>
+                                <option value="Toshkent, Mirzo Ulug'bek">Toshkent, Mirzo Ulug'bek</option>
+                                <option value="Toshkent, Shayxontohur">Toshkent, Shayxontohur</option>
+                                <option value="Toshkent, Yakkasaroy">Toshkent, Yakkasaroy</option>
+                                <option value="Toshkent, Olmazor">Toshkent, Olmazor</option>
+                                <option value="Toshkent, Bektemir">Toshkent, Bektemir</option>
+                                <option value="Toshkent, Sergeli">Toshkent, Sergeli</option>
+                                <option value="Toshkent, Uchtepa">Toshkent, Uchtepa</option>
+                            </optgroup>
+                            <optgroup label="Boshqa shaharlar">
+                                <option value="Samarqand, Markaz">Samarqand, Markaz</option>
+                                <option value="Buxoro, Eski shahar">Buxoro, Eski shahar</option>
+                                <option value="Namangan, Markaz">Namangan, Markaz</option>
+                                <option value="Andijon, Markaz">Andijon, Markaz</option>
+                                <option value="Farg'ona, Markaz">Farg'ona, Markaz</option>
+                                <option value="Nukus, Markaz">Nukus, Markaz</option>
+                            </optgroup>
+                        </select>
+                        <div class="field-error" id="locationError">Manzilni tanlang!</div>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="al-form-row">
+                        <div class="al-form-group">
+                            <label for="listingPrice">Narxi <span class="req">*</span></label>
+                            <div class="price-input-wrap">
+                                <input type="number" class="al-input" id="listingPrice" placeholder="250000" min="1000"
+                                    max="99999999" oninput="updatePreview()" />
+                                <span class="price-suffix">so'm</span>
+                            </div>
+                            <div class="field-error" id="priceError">Narxni kiriting!</div>
+                        </div>
+                        <div class="al-form-group">
+                            <label for="listingPriceType">Narx turi</label>
+                            <select class="al-input al-select" id="listingPriceType">
+                                <option value="kunlik">Kunlik</option>
+                                <option value="soatlik">Soatlik</option>
+                                <option value="haftalik">Haftalik</option>
+                                <option value="oylik">Oylik</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-nav-btns">
+                        <span></span>
+                        <button class="btn-next" onclick="goStep(2)">Davom etish →</button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: Tavsif + Rasm + Bog'lanish -->
+                <div class="step-panel" id="step2">
+                    <!-- Description -->
+                    <div class="al-form-group">
+                        <label for="listingDesc">Tavsif <span class="req">*</span></label>
+                        <textarea class="al-input al-textarea" id="listingDesc"
+                            placeholder="E'loningiz haqida batafsil ma'lumot yozing. Xususiyatlari, holati, qo'shimcha xizmatlari..."
+                            maxlength="800" oninput="updateDescCounter()"></textarea>
+                        <div style="font-size:11px;color:var(--gray-light);text-align:right;margin-top:4px;">
+                            <span id="descCounter">0</span>/800 belgi
+                        </div>
+                        <div class="field-error" id="descError">Tavsif kiriting (kamida 30 belgi)!</div>
+                    </div>
+
+                    <!-- Features -->
+                    <div class="al-form-group">
+                        <label>Qo'shimcha imkoniyatlar <small style="font-weight:400;color:var(--gray)">(Enter bilan
+                                qo'shing)</small></label>
+                        <div class="features-container" id="featuresContainer"
+                            onclick="document.getElementById('featuresInput').focus()">
+                            <input type="text" class="features-input" id="featuresInput"
+                                placeholder="WiFi, Konditsioner, Parkovka..." onkeydown="addFeature(event)" />
+                        </div>
+                    </div>
+
+                    <!-- Image URL -->
+                    <div class="al-form-group">
+                        <label>Rasm URL manzili <span class="req">*</span></label>
+                        <input type="url" class="al-input" id="listingImageUrl"
+                            placeholder="https://images.unsplash.com/... yoki boshqa rasm manzili"
+                            oninput="updateImagePreview()" />
+                        <div class="field-error" id="imageError">Rasm URLini kiriting!</div>
+                        <div style="font-size:12px;color:var(--gray);margin-top:6px;">
+                            💡 <a href="https://unsplash.com" target="_blank"
+                                style="color:var(--primary)">Unsplash.com</a> dan bepul rasmlar olishingiz mumkin
+                        </div>
+                        <div class="image-upload-area" id="imageUploadArea" style="margin-top:12px;">
+                            <div class="image-upload-icon">🖼️</div>
+                            <p>URL kiritilganda rasm bu yerda ko'rinadi</p>
+                            <small>Rasm aniq va sifatli bo'lishi kerak</small>
+                            <img id="imagePreviewEl" class="image-preview" alt="Preview" onerror="handleImageError()" />
+                        </div>
+                    </div>
+
+                    <!-- Min days + Deposit -->
+                    <div class="al-form-row">
+                        <div class="al-form-group">
+                            <label for="minDays">Minimal ijara muddati (kun)</label>
+                            <input type="number" class="al-input" id="minDays" value="1" min="1" max="365" />
+                        </div>
+                        <div class="al-form-group">
+                            <label for="depositAmount">Depozit (so'm)</label>
+                            <div class="price-input-wrap">
+                                <input type="number" class="al-input" id="depositAmount" placeholder="300000" min="0" />
+                                <span class="price-suffix">so'm</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="al-form-group">
+                        <label for="contactPhone">Bog'lanish uchun telefon <span class="req">*</span></label>
+                        <input type="tel" class="al-input" id="contactPhone" placeholder="+998 90 000 00 00" />
+                        <div class="field-error" id="phoneError">Telefon raqamini kiriting!</div>
+                    </div>
+
+                    <div class="form-nav-btns">
+                        <button class="btn-prev" onclick="goStep(1)">← Orqaga</button>
+                        <button class="btn-next" onclick="goStep(3)">Tasdiqlashga →</button>
+                    </div>
+                </div>
+
+                <!-- STEP 3: Ko'rib chiqish va Yuborish -->
+                <div class="step-panel" id="step3">
+                    <div id="reviewContent">
+                        <!-- JS bilan to'ldiriladi -->
+                    </div>
+
+                    <!-- Terms -->
+                    <div class="al-form-group" style="margin-top:20px;">
+                        <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-weight:500;">
+                            <input type="checkbox" id="termsCheck"
+                                style="accent-color:#6366f1;width:16px;height:16px;flex-shrink:0;margin-top:3px;" />
+                            <span style="font-size:13px;color:var(--dark-3);">
+                                Men <a href="terms.html" style="color:var(--primary);font-weight:700;">Foydalanish
+                                    shartlari</a> ni qabul qilaman.
+                                E'lon admin tomonidan ko'rib chiqilgach, mos kategoriyada ko'rinadi.
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="form-nav-btns">
+                        <button class="btn-prev" onclick="goStep(2)">← Orqaga</button>
+                        <button class="btn-next btn-submit" onclick="submitListing()">🚀 E'lonni Yuborish</button>
+                    </div>
+                </div>
+
+                <!-- SUCCESS -->
+                <div class="step-panel" id="stepSuccess">
+                    <div class="success-panel">
+                        <div class="success-icon">🎉</div>
+                        <h2>E'lon muvaffaqiyatli yuborildi!</h2>
+                        <p>
+                            E'loningiz admin tomonidan ko'rib chiqilmoqda.<br>
+                            Odatda <strong>24 soat</strong> ichida tasdiqlash amalga oshiriladi.<br>
+                            Tasdiqlangach, e'loningiz mos kategoriyada chiqadi.
+                        </p>
+                        <div class="success-btns">
+                            <a href="listings.html" class="btn btn-primary btn-lg">📋 E'lonlarni Ko'rish</a>
+                            <button class="btn btn-ghost btn-lg"
+                                style="background:var(--bg);color:var(--dark);border:2px solid var(--border);"
+                                onclick="resetForm()">➕ Yangi E'lon</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- SIDEBAR PREVIEW -->
+        <div>
+            <div class="preview-card">
+                <div class="preview-card-head">
+                    👁️ Jonli ko'rinish
+                </div>
+                <div id="previewContent">
+                    <div class="preview-placeholder">
+                        <div style="font-size:36px;margin-bottom:12px;">📋</div>
+                        <p>Ma'lumot kiritgan sayin<br>bu yerda ko'rinadi</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tips -->
+            <div class="tips-box">
+                <h4>💡 Yaxshi e'lon uchun maslahatlar:</h4>
+                <ul>
+                    <li>✅ Aniq va qisqa sarlavha yozing</li>
+                    <li>✅ Sifatli rasm qo'shing</li>
+                    <li>✅ Barcha xususiyatlarni ko'rsating</li>
+                    <li>✅ Narxni real qiling</li>
+                    <li>✅ Aloqa raqamingizni tekshiring</li>
+                    <li>✅ Kamida 50 so'z tavsif yozing</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="data.js"></script>
+    <script src="main.js"></script>
+    <script src="auth.js"></script>
+    <script src="listings-store.js"></script>
+    <script src="widgets.js"></script>
+    <script src="enhancements.js"></script>
+    <script>
+        // ================================================================
+        //  ADD LISTING JS
+        // ================================================================
+
+        let currentStep = 1;
+        let selectedCategory = '';
+        let selectedCategoryLabel = '';
+        let features = [];
+
+        // Auth tekshirish — har qanday kirgan foydalanuvchi e'lon qo'sha oladi
+        document.addEventListener('DOMContentLoaded', () => {
+            let user = AUTH.getCurrentUser();
+            if (!user) {
+                showToast('E\'lon qo\'shish uchun avval kirish kerak!', 'info');
+                setTimeout(() => { window.location.href = 'login.html?redirect=add-listing.html'; }, 1200);
+                return;
+            }
+            // Agar ijarachi bo'lsa, avtomatik owner ga o'tkazish (role upgrade)
+            if (user.role !== 'owner' && user.role !== 'admin') {
+                const users = AUTH.getUsers();
+                const idx = users.findIndex(u => u.id === user.id);
+                if (idx !== -1) {
+                    users[idx].role = 'owner';
+                    AUTH.saveUsers(users);
+                    AUTH.setSession(users[idx]);
+                    user = AUTH.getCurrentUser();
+                    showToast('✅ Hisobingiz "Ega" sifatida faollashtirildi!', 'success');
+                }
+            }
+            document.getElementById('authBadge').textContent = 👤 ${user.firstName} — E'lon qo'shish`;
+        });
+
+        // ================================================================
+        //  STEP NAVIGATION
+        // ================================================================
+        function goStep(step) {
+            if (step > currentStep && !validateStep(currentStep)) return;
+
+            const prev = currentStep;
+            currentStep = step;
+
+            // Panel almashtirish
+            document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById('step' + step).classList.add('active');
+
+            // Indicators yangilash
+            updateIndicators(step);
+
+            // Card head yangilash
+            updateCardHead(step);
+
+            // Review ko'rsatish
+            if (step === 3) renderReview();
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateIndicators(current) {
+            for (let i = 1; i <= 3; i++) {
+                const dot = document.getElementById('sdot' + i);
+                dot.classList.remove('active', 'done');
+                if (i < current) dot.classList.add('done');
+                else if (i === current) dot.classList.add('active');
+            }
+            for (let i = 1; i <= 2; i++) {
+                const line = document.getElementById('sline' + i);
+                line.classList.toggle('done', i < current);
+            }
+        }
+
+        function updateCardHead(step) {
+            const titles = {
+                1: ['Kategoriya va asosiy ma\'lumotlar', 'E\'loningiz qaysi bo\'limga kiradi?'],
+                2: ['Batafsil ma\'lumotlar', 'Rasm, tavsif va bog\'lanish'],
+                3: ['Ko\'rib chiqish va yuborish', 'Hamma narsa to\'g\'rimi?'],
+            };
+            const t = titles[step];
+            if (t) {
+                document.getElementById('cardStepBadge').textContent = step;
+                document.getElementById('cardStepTitle').textContent = t[0];
+                document.getElementById('cardStepSub').textContent = t[1];
+            }
+        }
+
+        // ================================================================
+        //  VALIDATION
+        // ================================================================
+        function validateStep(step) {
+            if (step === 1) {
+                let ok = true;
+                if (!selectedCategory) {
+                    document.getElementById('catError').classList.add('show');
+                    ok = false;
+                } else {
+                    document.getElementById('catError').classList.remove('show');
+                }
+                const title = document.getElementById('listingTitle').value.trim();
+                if (title.length < 5) {
+                    document.getElementById('titleError').classList.add('show');
+                    document.getElementById('listingTitle').classList.add('error');
+                    ok = false;
+                } else {
+                    document.getElementById('titleError').classList.remove('show');
+                    document.getElementById('listingTitle').classList.remove('error');
+                }
+                const location = document.getElementById('listingLocation').value;
+                if (!location) {
+                    document.getElementById('locationError').classList.add('show');
+                    ok = false;
+                } else {
+                    document.getElementById('locationError').classList.remove('show');
+                }
+                const price = document.getElementById('listingPrice').value;
+                if (!price || parseInt(price) < 1000) {
+                    document.getElementById('priceError').classList.add('show');
+                    ok = false;
+                } else {
+                    document.getElementById('priceError').classList.remove('show');
+                }
+                if (!ok) showToast('Iltimos, barcha maydonlarni to\'ldiring!', 'info');
+                return ok;
+            }
+
+            if (step === 2) {
+                let ok = true;
+                const desc = document.getElementById('listingDesc').value.trim();
+                if (desc.length < 30) {
+                    document.getElementById('descError').classList.add('show');
+                    ok = false;
+                } else {
+                    document.getElementById('descError').classList.remove('show');
+                }
+                const imageUrl = document.getElementById('listingImageUrl').value.trim();
+                if (!imageUrl) {
+                    document.getElementById('imageError').classList.add('show');
+                    ok = false;
+                } else {
+                    document.getElementById('imageError').classList.remove('show');
+                }
+                const phone = document.getElementById('contactPhone').value.trim();
+                if (phone.length < 9) {
+                    document.getElementById('phoneError').classList.add('show');
+                    ok = false;
+                } else {
+                    document.getElementById('phoneError').classList.remove('show');
+                }
+                if (!ok) showToast('Barcha maydonlarni to\'g\'ri to\'ldiring!', 'info');
+                return ok;
+            }
+            return true;
+        }
+
+        // ================================================================
+        //  CATEGORY SELECTION
+        // ================================================================
+        function selectCat(el) {
+            document.querySelectorAll('.cat-option').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedCategory = el.dataset.cat;
+            selectedCategoryLabel = el.dataset.label;
+            document.getElementById('catError').classList.remove('show');
+            updatePreview();
+        }
+
+        // ================================================================
+        //  FEATURES TAGS
+        // ================================================================
+        function addFeature(e) {
+            if (e.key !== 'Enter' && e.key !== ',') return;
+            e.preventDefault();
+            const inp = document.getElementById('featuresInput');
+            const val = inp.value.trim().replace(',', '');
+            if (!val || features.includes(val)) { inp.value = ''; return; }
+            features.push(val);
+            renderFeatures();
+            inp.value = '';
+        }
+
+        function removeFeature(i) {
+            features.splice(i, 1);
+            renderFeatures();
+        }
+
+        function renderFeatures() {
+            const container = document.getElementById('featuresContainer');
+            const inp = document.getElementById('featuresInput');
+            container.innerHTML = '';
+            features.forEach((f, i) => {
+                const tag = document.createElement('span');
+                tag.className = 'feature-tag-al';
+                tag.innerHTML = ${f}<button onclick="removeFeature(${i})" title="O'chirish">×</button>`;
+                container.appendChild(tag);
+            });
+            container.appendChild(inp);
+            inp.focus();
+        }
+
+        // ================================================================
+        //  IMAGE PREVIEW
+        // ================================================================
+        function updateImagePreview() {
+            const url = document.getElementById('listingImageUrl').value.trim();
+            const preview = document.getElementById('imagePreviewEl');
+            const area = document.getElementById('imageUploadArea');
+            if (url) {
+                preview.src = url;
+                preview.style.display = 'block';
+                area.classList.add('has-url');
+                area.querySelector('.image-upload-icon').style.display = 'none';
+                area.querySelector('p').style.display = 'none';
+                area.querySelector('small').style.display = 'none';
+            } else {
+                preview.style.display = 'none';
+                area.classList.remove('has-url');
+                area.querySelector('.image-upload-icon').style.display = 'block';
+                area.querySelector('p').style.display = 'block';
+                area.querySelector('small').style.display = 'block';
+            }
+            updatePreview();
+        }
+
+        function handleImageError() {
+            const area = document.getElementById('imageUploadArea');
+            area.classList.remove('has-url');
+            document.getElementById('imagePreviewEl').style.display = 'none';
+            showToast('Rasm manzili noto\'g\'ri yoki rasm ko\'rsatilmaydi', 'info');
+        }
+
+        // ================================================================
+        //  LIVE PREVIEW
+        // ================================================================
+        function updatePreview() {
+            const title = document.getElementById('listingTitle').value.trim();
+            const price = document.getElementById('listingPrice').value;
+            const priceType = document.getElementById('listingPriceType').value;
+            const location = document.getElementById('listingLocation').value;
+            const imageUrl = document.getElementById('listingImageUrl')?.value.trim() || '';
+
+            if (!title && !price && !selectedCategory) {
+                document.getElementById('previewContent').innerHTML = 
+                    <div class="preview-placeholder">
+                        <div style="font-size:36px;margin-bottom:12px;">📋</div>
+                        <p>Ma'lumot kiritgan sayin<br>bu yerda ko'rinadi</p>
+                    </div>`;
+                return;
+            }
+
+            document.getElementById('previewContent').innerHTML = 
+                <div class="preview-image">
+                    ${imageUrl ? <img src="${imageUrl}" alt="Preview" onerror="this.parentElement.innerHTML='<span style=font-size:50px>🏠</span>'" />` : '<span style="font-size:50px">🏠</span>'}
+                </div>
+                <div class="preview-body">
+                    <div class="preview-cat">${selectedCategoryLabel || '📋 Kategoriya'}</div>
+                    <div class="preview-title">${title || 'E\'lon sarlavhasi...'}</div>
+                    <div class="preview-location">📍 ${location || 'Manzil'}</div>
+                    <div class="preview-price">
+                        ${price ? parseInt(price).toLocaleString('uz-UZ') + ' so\'m' : '---'}
+                        <span>/${priceType}</span>
+                    </div>
+                    <div style="margin-top:12px;display:flex;align-items:center;gap:8px;">
+                        <span style="font-size:11px;background:#fef3c7;color:#92400e;padding:3px 10px;border-radius:100px;font-weight:700;">⏳ Admin tasdiqlashida</span>
+                    </div>
+                </div>
+            ;
+        }
+
+        function updateDescCounter() {
+            const len = document.getElementById('listingDesc').value.length;
+            document.getElementById('descCounter').textContent = len;
+        }
+
+        // ================================================================
+        //  REVIEW RENDER
+        // ================================================================
+        function renderReview() {
+            const data = getFormData();
+            document.getElementById('reviewContent').innerHTML = 
+                <div style="background:var(--bg);border-radius:14px;padding:20px;margin-bottom:16px;">
+                    <h3 style="font-size:15px;font-weight:700;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:12px;">📋 E'lon ma'lumotlari</h3>
+                    <div style="display:grid;gap:10px;">
+                        <div style="display:flex;justify-content:space-between;font-size:14px;">
+                            <span style="color:var(--gray);">Kategoriya:</span>
+                            <strong>${data.categoryLabel}</strong>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;font-size:14px;">
+                            <span style="color:var(--gray);">Sarlavha:</span>
+                            <strong style="max-width:60%;text-align:right;">${data.title}</strong>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;font-size:14px;">
+                            <span style="color:var(--gray);">Manzil:</span>
+                            <strong>${data.location}</strong>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;font-size:14px;">
+                            <span style="color:var(--gray);">Narx:</span>
+                            <strong style="color:var(--primary);">${parseInt(data.price).toLocaleString('uz-UZ')} so'm/${data.priceType}</strong>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;font-size:14px;">
+                            <span style="color:var(--gray);">Depozit:</span>
+                            <strong>${data.deposit ? parseInt(data.deposit).toLocaleString('uz-UZ') + ' so\'m' : 'Yo\'q'}</strong>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;font-size:14px;">
+                            <span style="color:var(--gray);">Min. muddat:</span>
+                            <strong>${data.minDays} kun</strong>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;font-size:14px;">
+                            <span style="color:var(--gray);">Telefon:</span>
+                            <strong>${data.phone}</strong>
+                        </div>
+                        ${data.features.length ? 
+                        <div style="font-size:14px;">
+                            <span style="color:var(--gray);">Xususiyatlar:</span>
+                            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">
+                                ${data.features.map(f => <span style="background:#eef2ff;color:#4f46e5;padding:3px 10px;border-radius:100px;font-size:12px;font-weight:600;">${f}</span>`).join('')}
+                            </div>
+                        </div>` : ''}
+                    </div>
+                </div>
+                <div style="background:linear-gradient(135deg,#ecfdf5,#d1fae5);border-radius:14px;padding:16px 20px;border:1px solid #a7f3d0;">
+                    <div style="display:flex;gap:12px;align-items:flex-start;">
+                        <span style="font-size:24px;">📨</span>
+                        <div>
+                            <div style="font-weight:700;font-size:13px;color:#065f46;margin-bottom:4px;">E'lon yuborilgach nima bo'ladi?</div>
+                            <div style="font-size:12px;color:#047857;line-height:1.6;">
+                                1. Admin 24 soat ichida ko'rib chiqadi<br>
+                                2. Tasdiqlangach, <strong>${data.categoryLabel}</strong> bo'limida chiqadi<br>
+                                3. Foydalanuvchilar ko'rishi va bron qilishi mumkin
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ;
+        }
+
+        // ================================================================
+        //  SUBMIT
+        // ================================================================
+        function getFormData() {
+            return {
+                category: selectedCategory,
+                categoryLabel: selectedCategoryLabel,
+                title: document.getElementById('listingTitle').value.trim(),
+                location: document.getElementById('listingLocation').value,
+                price: document.getElementById('listingPrice').value,
+                priceType: document.getElementById('listingPriceType').value,
+                description: document.getElementById('listingDesc').value.trim(),
+                features: [...features],
+                imageUrl: document.getElementById('listingImageUrl').value.trim(),
+                minDays: document.getElementById('minDays').value || 1,
+                deposit: document.getElementById('depositAmount').value || 0,
+                phone: document.getElementById('contactPhone').value.trim(),
+            };
+        }
+
+        function submitListing() {
+            if (!document.getElementById('termsCheck').checked) {
+                showToast('Foydalanish shartlarini qabul qiling!', 'info');
+                return;
+            }
+
+            const user = AUTH.getCurrentUser();
+            if (!user) {
+                showToast('Kirish talab etiladi!', 'info');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const data = getFormData();
+            const listing = STORE.add(data, user);
+
+            // Success
+            document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById('stepSuccess').classList.add('active');
+                if (window.launchConfetti) setTimeout(() => launchConfetti(50,0), 300);;
+            document.getElementById('stepsIndicator').style.display = 'none';
+            document.getElementById('cardStepBadge').textContent = '✓';
+            document.getElementById('cardStepTitle').textContent = 'E\'lon yuborildi!';
+            document.getElementById('cardStepSub').textContent = 'Admin tomonidan ko\'rib chiqilmoqda';
+
+            // Confetti-like
+            showToast('🎉 E\'lon muvaffaqiyatli yuborildi! Admin tasdiqlashini kuting.', 'success');
+        }
+
+        function resetForm() {
+            currentStep = 1;
+            selectedCategory = '';
+            selectedCategoryLabel = '';
+            features = [];
+            document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById('step1').classList.add('active');
+            document.getElementById('stepsIndicator').style.display = 'flex';
+            document.getElementById('listingTitle').value = '';
+            document.getElementById('listingDesc').value = '';
+            document.getElementById('listingPrice').value = '';
+            document.getElementById('listingImageUrl').value = '';
+            document.getElementById('contactPhone').value = '';
+            document.querySelectorAll('.cat-option').forEach(c => c.classList.remove('selected'));
+            renderFeatures();
+            updatePreview();
+            updateIndicators(1);
+            updateCardHead(1);
+        }
+    </script>
+
+    <script src="support-chat.js"></script>
+</body>
+
+</html>
