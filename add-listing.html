@@ -1049,7 +1049,7 @@
                     showToast('✅ Hisobingiz "Ega" sifatida faollashtirildi!', 'success');
                 }
             }
-            document.getElementById('authBadge').textContent = 👤 ${user.firstName} — E'lon qo'shish`;
+            document.getElementById('authBadge').textContent = `👤 ${user.firstName} — E'lon qo'shish`;
         });
 
         // ================================================================
@@ -1210,7 +1210,7 @@
             features.forEach((f, i) => {
                 const tag = document.createElement('span');
                 tag.className = 'feature-tag-al';
-                tag.innerHTML = ${f}<button onclick="removeFeature(${i})" title="O'chirish">×</button>`;
+                tag.innerHTML = `${f}<button onclick="removeFeature(${i})" title="O'chirish">×</button>`;
                 container.appendChild(tag);
             });
             container.appendChild(inp);
@@ -1259,7 +1259,7 @@
             const imageUrl = document.getElementById('listingImageUrl')?.value.trim() || '';
 
             if (!title && !price && !selectedCategory) {
-                document.getElementById('previewContent').innerHTML = 
+                document.getElementById('previewContent').innerHTML = `
                     <div class="preview-placeholder">
                         <div style="font-size:36px;margin-bottom:12px;">📋</div>
                         <p>Ma'lumot kiritgan sayin<br>bu yerda ko'rinadi</p>
@@ -1267,9 +1267,9 @@
                 return;
             }
 
-            document.getElementById('previewContent').innerHTML = 
+            document.getElementById('previewContent').innerHTML = `
                 <div class="preview-image">
-                    ${imageUrl ? <img src="${imageUrl}" alt="Preview" onerror="this.parentElement.innerHTML='<span style=font-size:50px>🏠</span>'" />` : '<span style="font-size:50px">🏠</span>'}
+                    ${imageUrl ? `<img src="${imageUrl}" alt="Preview" onerror="this.parentElement.innerHTML='<span style=font-size:50px>🏠</span>'" />` : '<span style="font-size:50px">🏠</span>'}
                 </div>
                 <div class="preview-body">
                     <div class="preview-cat">${selectedCategoryLabel || '📋 Kategoriya'}</div>
@@ -1283,7 +1283,7 @@
                         <span style="font-size:11px;background:#fef3c7;color:#92400e;padding:3px 10px;border-radius:100px;font-weight:700;">⏳ Admin tasdiqlashida</span>
                     </div>
                 </div>
-            ;
+            `;
         }
 
         function updateDescCounter() {
@@ -1296,7 +1296,7 @@
         // ================================================================
         function renderReview() {
             const data = getFormData();
-            document.getElementById('reviewContent').innerHTML = 
+            document.getElementById('reviewContent').innerHTML = `
                 <div style="background:var(--bg);border-radius:14px;padding:20px;margin-bottom:16px;">
                     <h3 style="font-size:15px;font-weight:700;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:12px;">📋 E'lon ma'lumotlari</h3>
                     <div style="display:grid;gap:10px;">
@@ -1328,11 +1328,11 @@
                             <span style="color:var(--gray);">Telefon:</span>
                             <strong>${data.phone}</strong>
                         </div>
-                        ${data.features.length ? 
+                        ${data.features.length ? `
                         <div style="font-size:14px;">
                             <span style="color:var(--gray);">Xususiyatlar:</span>
                             <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">
-                                ${data.features.map(f => <span style="background:#eef2ff;color:#4f46e5;padding:3px 10px;border-radius:100px;font-size:12px;font-weight:600;">${f}</span>`).join('')}
+                                ${data.features.map(f => `<span style="background:#eef2ff;color:#4f46e5;padding:3px 10px;border-radius:100px;font-size:12px;font-weight:600;">${f}</span>`).join('')}
                             </div>
                         </div>` : ''}
                     </div>
@@ -1350,7 +1350,7 @@
                         </div>
                     </div>
                 </div>
-            ;
+            `;
         }
 
         // ================================================================
@@ -1392,7 +1392,7 @@
             // Success
             document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
             document.getElementById('stepSuccess').classList.add('active');
-                if (window.launchConfetti) setTimeout(() => launchConfetti(50,0), 300);;
+            if (window.launchConfetti) setTimeout(() => launchConfetti(50, 0), 300);;
             document.getElementById('stepsIndicator').style.display = 'none';
             document.getElementById('cardStepBadge').textContent = '✓';
             document.getElementById('cardStepTitle').textContent = 'E\'lon yuborildi!';
